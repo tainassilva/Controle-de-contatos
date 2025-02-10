@@ -27,26 +27,26 @@ public class PessoaController {
 	PessoaService pessoaService;
 
 
-	@PostMapping //POST http://localhost:8080/api/pessoas
+	@PostMapping 
 	public ResponseEntity<Pessoa> save(@RequestBody Pessoa pessoa) {
 	Pessoa pessoas = pessoaService.save(pessoa);
 	if(pessoas == null) {
-		return ResponseEntity.badRequest().build(); //dê status code 400
+		return ResponseEntity.badRequest().build(); 
 	}else {
-		return ResponseEntity.ok(pessoas); //dê status code 200 e retorna objeto
+		return ResponseEntity.ok(pessoas); 
 	}
 }
-	@GetMapping("/{id}") //GET http://localhost:8080/api/pessoas/1
+	@GetMapping("/{id}") 
 	public ResponseEntity<Optional<Pessoa>> findById(@PathVariable Long id){
 		Optional<Pessoa> pessoa= pessoaService.findById(id);
-		if(pessoa.isEmpty()) { //isEmpty quer dizer que está vazio no Optional
-			return ResponseEntity.notFound().build(); //404
+		if(pessoa.isEmpty()) {
+			return ResponseEntity.notFound().build();
 		}else {
-			return ResponseEntity.ok(pessoa); //200
+			return ResponseEntity.ok(pessoa); 
 		}
 	}
 	
-	@GetMapping //GET http://localhost:8080/api/pessoas
+	@GetMapping 
 	public ResponseEntity<List<Pessoa>> findAll(){
 		List<Pessoa> pessoas = pessoaService.findAll();
 		if(pessoas == null)
@@ -65,23 +65,20 @@ public class PessoaController {
 
 	        return ResponseEntity.ok(pessoaDTO);
 	    }
-	 
-	 
-	 
-	@PutMapping //PUT http://localhost:8080/api/produtos
+	
+	@PutMapping
 	public ResponseEntity<Pessoa> update(@RequestBody Pessoa pessoa){
 		Pessoa updPessoa = pessoaService.update(pessoa);
 		if(updPessoa == null) {
-			return ResponseEntity.badRequest().build(); //dê status code 400
+			return ResponseEntity.badRequest().build();
 		}else {
-			return ResponseEntity.ok(updPessoa); //dê status code 200 e retorna objeto
+			return ResponseEntity.ok(updPessoa); 
 		}
 	}
 	
-	@DeleteMapping("/{id}") //DELETE http://localhost:8080/api/produtos/1
+	@DeleteMapping("/{id}")
 	public ResponseEntity<?> delete(@PathVariable Long id){
 		pessoaService.delete(id);
-		return new ResponseEntity<>(HttpStatus.NO_CONTENT); //204
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
-	
 }

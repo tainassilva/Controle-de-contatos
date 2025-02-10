@@ -27,14 +27,12 @@ public class ContatoController {
 	
 	@PostMapping
     public ResponseEntity<Contato> save(@RequestBody Contato contato) {
-        // Chama o serviço para salvar o contato
+       
         Contato savedContato = contatoService.save(contato);
 
         if (savedContato != null) {
-            // Se o contato for salvo com sucesso, retorna o contato com status 201 Created
             return ResponseEntity.status(201).body(savedContato);
         } else {
-            // Se não conseguir salvar (por exemplo, pessoa não encontrada), retorna erro 400 Bad Request
             return ResponseEntity.badRequest().build();
         }
     }
@@ -43,22 +41,19 @@ public class ContatoController {
 	public ResponseEntity<Optional<Contato>> findById(@PathVariable Long id){
 		Optional<Contato> findContato = contatoService.findById(id);
 		if(findContato == null)
-			return ResponseEntity.badRequest().build(); //400
-		return ResponseEntity.ok(findContato); //200
+			return ResponseEntity.badRequest().build();
+		return ResponseEntity.ok(findContato); 
 	}
 	
 	@GetMapping("pessoa/{id}")
 	public ResponseEntity<List<Contato>> findAllPessoa(@PathVariable Long id) {
 	    List<Contato> findContato = contatoService.findAllPessoa(id);
-	    
-	    // Verificar se a lista está vazia
+	  
 	    if (findContato.isEmpty()) {
-	        // Retorna 204 No Content quando não encontrar nenhum contato
-	        return ResponseEntity.noContent().build(); // 204
+	        return ResponseEntity.noContent().build(); 
 	    }
 	    
-	    // Retorna 200 OK com a lista de contatos
-	    return ResponseEntity.ok(findContato); // 200
+	    return ResponseEntity.ok(findContato);
 	}
 
 
@@ -67,13 +62,13 @@ public class ContatoController {
 	public ResponseEntity<Contato> update(@RequestBody Contato contato){
 		Contato updContato = contatoService.update(contato);
 		if(updContato == null)
-			return ResponseEntity.badRequest().build(); //400
-		return ResponseEntity.ok(updContato); //200
+			return ResponseEntity.badRequest().build(); 
+		return ResponseEntity.ok(updContato); 
 	}
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> delete(@PathVariable Long id){
 		contatoService.delete(id);
-		return new ResponseEntity<>(HttpStatus.NO_CONTENT);//204
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 }
 }
