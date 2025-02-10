@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.taina.model.Contato;
 import br.com.taina.service.ContatoService;
+import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
 @RequestMapping("/api/contatos")
@@ -26,18 +27,20 @@ public class ContatoController {
 	ContatoService contatoService;
 	
 	@PostMapping
+	@Operation(summary= "Este endpoint é para salvar um contato à uma pessoa")
     public ResponseEntity<Contato> save(@RequestBody Contato contato) {
        
-        Contato savedContato = contatoService.save(contato);
+        Contato salvarContato = contatoService.save(contato);
 
-        if (savedContato != null) {
-            return ResponseEntity.status(201).body(savedContato);
+        if (salvarContato != null) {
+            return ResponseEntity.status(201).body(salvarContato);
         } else {
             return ResponseEntity.badRequest().build();
         }
     }
 	
 	@GetMapping("/{id}")
+	@Operation(summary= "Este endpoint é para consultar um contato por ID")
 	public ResponseEntity<Optional<Contato>> findById(@PathVariable Long id){
 		Optional<Contato> findContato = contatoService.findById(id);
 		if(findContato == null)
@@ -46,6 +49,7 @@ public class ContatoController {
 	}
 	
 	@GetMapping("pessoa/{id}")
+	@Operation(summary= "Este endpoint é para listar todos os contato de uma pessoa")
 	public ResponseEntity<List<Contato>> findAllPessoa(@PathVariable Long id) {
 	    List<Contato> findContato = contatoService.findAllPessoa(id);
 	  
@@ -59,6 +63,7 @@ public class ContatoController {
 
 	
 	@PutMapping
+	@Operation(summary= "Este endpoint é para alterar um contato existente")
 	public ResponseEntity<Contato> update(@RequestBody Contato contato){
 		Contato updContato = contatoService.update(contato);
 		if(updContato == null)
@@ -67,6 +72,7 @@ public class ContatoController {
 	}
 	
 	@DeleteMapping("/{id}")
+	@Operation(summary= "Este endpoint deleta um contato por ID")
 	public ResponseEntity<?> delete(@PathVariable Long id){
 		contatoService.delete(id);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);

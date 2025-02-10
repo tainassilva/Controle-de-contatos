@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.taina.dto.PessoaDTO;
 import br.com.taina.model.Pessoa;
 import br.com.taina.service.PessoaService;
+import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
 @RequestMapping("api/pessoas")
@@ -28,6 +29,7 @@ public class PessoaController {
 
 
 	@PostMapping 
+	@Operation(summary= "Este endpoint é para cadastrar uma pessoa")
 	public ResponseEntity<Pessoa> save(@RequestBody Pessoa pessoa) {
 	Pessoa pessoas = pessoaService.save(pessoa);
 	if(pessoas == null) {
@@ -36,7 +38,9 @@ public class PessoaController {
 		return ResponseEntity.ok(pessoas); 
 	}
 }
+	
 	@GetMapping("/{id}") 
+	@Operation(summary= "Este endpoint é para consultar uma pessoa por ID")
 	public ResponseEntity<Optional<Pessoa>> findById(@PathVariable Long id){
 		Optional<Pessoa> pessoa= pessoaService.findById(id);
 		if(pessoa.isEmpty()) {
@@ -47,6 +51,7 @@ public class PessoaController {
 	}
 	
 	@GetMapping 
+	@Operation(summary= "Este endpoint é para listar todas as pessoas cadastradas.")
 	public ResponseEntity<List<Pessoa>> findAll(){
 		List<Pessoa> pessoas = pessoaService.findAll();
 		if(pessoas == null)
@@ -56,6 +61,7 @@ public class PessoaController {
 		return ResponseEntity.ok(pessoas);
 	}
 	 @GetMapping("maladireta/{id}")
+	 @Operation(summary= "Este endpoint é para exibir um usuário por ID com mala direta.")
 	 public ResponseEntity<PessoaDTO> getPessoaById(@PathVariable Long id) {
 	        PessoaDTO pessoaDTO = pessoaService.findPessoaById(id);
 
@@ -67,6 +73,7 @@ public class PessoaController {
 	    }
 	
 	@PutMapping
+	@Operation(summary= "Este endpoint é para atualizar uma pessoa por id.")
 	public ResponseEntity<Pessoa> update(@RequestBody Pessoa pessoa){
 		Pessoa updPessoa = pessoaService.update(pessoa);
 		if(updPessoa == null) {
@@ -77,6 +84,7 @@ public class PessoaController {
 	}
 	
 	@DeleteMapping("/{id}")
+	@Operation(summary= "Este endpoint é para deletar um usuário por id.")
 	public ResponseEntity<?> delete(@PathVariable Long id){
 		pessoaService.delete(id);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
