@@ -26,8 +26,8 @@ public class ContatoService {
 	    if (contato.getPessoa() != null && contato.getPessoa().getIdPessoa() != null) {
 	        // Buscar a pessoa no banco de dados
 	        Optional<Pessoa> findPessoa = pessoaRepository.findById(contato.getPessoa().getIdPessoa());
-	        
-	        if (findPessoa.isEmpty()) {
+	     
+	        if (findPessoa.isPresent()) {
 	            // Se a pessoa não for encontrada, retorna null ou uma mensagem
 	            System.out.println("Pessoa não encontrada");
 	            return null;
@@ -64,24 +64,31 @@ public class ContatoService {
 	        return List.of(); // Retorna lista vazia
 	    }
 	}
+//*************************** Ver sobre as regras dos enums
+	public Contato update(Long id, Contato contato) {
+	    // Buscar o contato pelo ID recebido na URL
+	    Optional<Contato> findContato = contatoRepository.findById(id);
+	    
+	    if (findContato.isPresent()) {
+	        Contato updContato = findContato.get();
+	        updContato.setTipoContato(contato.getTipoContato());
+	        updContato.setContato(contato.getContato());
+	        
+	        return contatoRepository.save(updContato); // UPDATE
+	    }
 
-	public Contato update(Contato contato) {
-		//Pesquisar se o estoque existe
-		Optional<Contato> findContato= contatoRepository
-				.findById(contato.getIdContato());
-		//se existir, atualizar:
-		if(findContato.isPresent()) {
-			//variavel auxiliar
-			Contato updContato = findContato.get();
-			 updContato.setTipoContato(contato.getTipoContato());
-	         updContato.setContato(contato.getContato());			//gravar no banco
-			return contatoRepository.save(updContato);
-		}
 		return contatoRepository.save(contato);
 	}
 	
-	public void delete(Long id) {
-		contatoRepository.deleteById(id);
-	}
+	   // CRUD - Delete
+    public void delete(Long id) {
+        Optional<Contato> contatoOpt = contatoRepository.findById(id);
+        if (contatoOpt.isPresent()) {
+        	contatoRepository.deleteById(id);
+        } else {
+        	System.out.println("Pessoa com id " + id + "não encontrada para exclusão");
+           // throw new IllegalArgumentException("Pessoa com ID " + id + " não encontrada para exclusão.");
+        }
+    }
 
 }

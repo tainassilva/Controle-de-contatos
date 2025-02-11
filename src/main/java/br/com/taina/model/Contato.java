@@ -1,7 +1,6 @@
 package br.com.taina.model;
 
 import br.com.taina.contatosEnum.TipoContato;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -27,7 +26,7 @@ public class Contato {
 	private String contato;
 	
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name = "id_pessoa")
 	private Pessoa pessoa;    
     

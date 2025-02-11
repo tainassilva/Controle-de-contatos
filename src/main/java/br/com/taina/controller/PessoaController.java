@@ -72,17 +72,18 @@ public class PessoaController {
 	        return ResponseEntity.ok(pessoaDTO);
 	    }
 	
-	@PutMapping
-	@Operation(summary= "Este endpoint é para atualizar uma pessoa por id.")
-	public ResponseEntity<Pessoa> update(@RequestBody Pessoa pessoa){
-		Pessoa updPessoa = pessoaService.update(pessoa);
-		if(updPessoa == null) {
-			return ResponseEntity.badRequest().build();
-		}else {
-			return ResponseEntity.ok(updPessoa); 
-		}
-	}
-	
+	 @PutMapping("/{id}")
+	 @Operation(summary = "Este endpoint é para atualizar uma pessoa por ID.")
+	 public ResponseEntity<Pessoa> update(@PathVariable Long id, @RequestBody Pessoa pessoa) {
+	     Pessoa updPessoa = pessoaService.update(id, pessoa);
+	     
+	     if (updPessoa == null) {
+	         return ResponseEntity.notFound().build();
+	     }
+	     
+	     return ResponseEntity.ok(updPessoa);
+	 }
+
 	@DeleteMapping("/{id}")
 	@Operation(summary= "Este endpoint é para deletar um usuário por id.")
 	public ResponseEntity<?> delete(@PathVariable Long id){

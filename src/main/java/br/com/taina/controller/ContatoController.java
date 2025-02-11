@@ -62,15 +62,18 @@ public class ContatoController {
 
 
 	
-	@PutMapping
-	@Operation(summary= "Este endpoint é para alterar um contato existente")
-	public ResponseEntity<Contato> update(@RequestBody Contato contato){
-		Contato updContato = contatoService.update(contato);
-		if(updContato == null)
-			return ResponseEntity.badRequest().build(); 
-		return ResponseEntity.ok(updContato); 
+	@PutMapping("/{id}")
+	@Operation(summary = "Este endpoint é para alterar um contato existente")
+	public ResponseEntity<Contato> update(@PathVariable Long id, @RequestBody Contato contato) {
+	    Contato updContato = contatoService.update(id, contato);
+	    
+	    if (updContato == null) {
+	        return ResponseEntity.notFound().build(); // Retorna 404 se o contato não for encontrado
+	    }
+	    
+	    return ResponseEntity.ok(updContato);
 	}
-	
+
 	@DeleteMapping("/{id}")
 	@Operation(summary= "Este endpoint deleta um contato por ID")
 	public ResponseEntity<?> delete(@PathVariable Long id){

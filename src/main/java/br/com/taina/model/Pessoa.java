@@ -2,9 +2,12 @@ package br.com.taina.model;
 
 import java.util.List;
 
+import br.com.taina.contatosEnum.Estados;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -21,9 +24,11 @@ public class Pessoa {
 	private String nome;
 	
 	private String endereco;
+	//private String numeroCasa;
 	private String cep;
 	private String cidade;
-	private String uf;
+	@Enumerated(EnumType.STRING)
+	private Estados uf;
 	
 	@OneToMany(cascade = CascadeType.ALL,
 			mappedBy="pessoa",
@@ -34,8 +39,9 @@ public class Pessoa {
 	public Pessoa() {
 	}
 	
-	public Pessoa(Long idPessoa, String nome, String endereco, String cep, String cidade, String uf,
+	public Pessoa(Long idPessoa, String nome, String endereco, String cep, String cidade, Estados uf,
 			List<Contato> contatos) {
+		super();
 		this.idPessoa = idPessoa;
 		this.nome = nome;
 		this.endereco = endereco;
@@ -44,6 +50,20 @@ public class Pessoa {
 		this.uf = uf;
 		this.contatos = contatos;
 	}
+	
+	
+//	public String getNumeroCasa() {
+//		return numeroCasa;
+//	}
+//
+//	public void setNumeroCasa(String numeroCasa) {
+//		this.numeroCasa = numeroCasa;
+//	}
+
+
+
+
+
 	public Long getIdPessoa() {
 		return idPessoa;
 	}
@@ -74,17 +94,22 @@ public class Pessoa {
 	public void setCidade(String cidade) {
 		this.cidade = cidade;
 	}
-	public String getUf() {
+
+	public Estados getUf() {
 		return uf;
 	}
-	public void setUf(String uf) {
+
+	public void setUf(Estados uf) {
 		this.uf = uf;
 	}
+
 	@Override
 	public String toString() {
 		return "Pessoa [idPessoa=" + idPessoa + ", nome=" + nome + ", endereco=" + endereco + ", cep=" + cep
 				+ ", cidade=" + cidade + ", uf=" + uf + ", contatos=" + contatos + "]";
 	}
+	
+	
 	
 	
 	
