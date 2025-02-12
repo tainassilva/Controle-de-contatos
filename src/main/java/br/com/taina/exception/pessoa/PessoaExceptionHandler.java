@@ -15,6 +15,13 @@ public class PessoaExceptionHandler {
 		ErrorResponse error = new ErrorResponse(400, "Erro: " + ex.getMessage());
 		return ResponseEntity.badRequest().body(error);
 	}
+	
+	 @ExceptionHandler(NomeNuloOuVazioException.class)
+	    public ResponseEntity<ErrorResponse> handleNomeNuloOuVazio(NomeNuloOuVazioException ex) {
+	        ErrorResponse error = new ErrorResponse(400, "Erro: " + ex.getMessage());
+	        return ResponseEntity.badRequest().body(error);
+	    }
+	 
     @ExceptionHandler(NomeInvalidoException.class)
     public ResponseEntity<ErrorResponse> handleNomeInvalido(NomeInvalidoException ex) {
         ErrorResponse error = new ErrorResponse(400, "Erro: " + ex.getMessage());
@@ -36,6 +43,11 @@ public class PessoaExceptionHandler {
     @ExceptionHandler(UfInvalidoException.class)
     public ResponseEntity<ErrorResponse> handleUfInvalido(UfInvalidoException ex) {
         ErrorResponse error = new ErrorResponse(400, "Erro: " + ex.getMessage());
+        return ResponseEntity.badRequest().body(error);
+    }
+    @ExceptionHandler(ErroServidorException.class)
+    public ResponseEntity<ErrorResponse> handleErroServidor(ErroServidorException ex) {
+        ErrorResponse error = new ErrorResponse(500, "Erro: " + ex.getMessage());
         return ResponseEntity.badRequest().body(error);
     }
 }

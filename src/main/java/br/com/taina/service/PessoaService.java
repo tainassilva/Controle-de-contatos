@@ -24,10 +24,9 @@ public class PessoaService {
 
     // CRUD - Create
     public Pessoa save(Pessoa pessoa) {
-        // Validação
     	
+         // Validação
     	 pessoaValidation.validarPessoa(pessoa);
-
         try {
             return pessoaRepository.save(pessoa);
         } catch (Exception e) {

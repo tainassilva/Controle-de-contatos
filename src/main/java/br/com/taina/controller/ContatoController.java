@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.taina.model.Contato;
+import br.com.taina.model.Pessoa;
 import br.com.taina.service.ContatoService;
 import io.swagger.v3.oas.annotations.Operation;
 
@@ -41,12 +42,11 @@ public class ContatoController {
 	
 	@GetMapping("/{id}")
 	@Operation(summary= "Este endpoint é para consultar um contato por ID")
-	public ResponseEntity<Optional<Contato>> findById(@PathVariable Long id){
-		Optional<Contato> findContato = contatoService.findById(id);
-		if(findContato == null)
-			return ResponseEntity.badRequest().build();
-		return ResponseEntity.ok(findContato); 
+	public ResponseEntity<Contato> findById(@PathVariable Long id) {
+	    Contato contato = contatoService.findById(id); // Aqui você pega a pessoa retornada pelo serviço
+	    return ResponseEntity.ok(contato); // Retorna a pessoa no corpo da resposta
 	}
+
 	
 	@GetMapping("pessoa/{id}")
 	@Operation(summary= "Este endpoint é para listar todos os contato de uma pessoa")
@@ -78,6 +78,7 @@ public class ContatoController {
 	@Operation(summary= "Este endpoint deleta um contato por ID")
 	public ResponseEntity<?> delete(@PathVariable Long id){
 		contatoService.delete(id);
-		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		return ResponseEntity.noContent().build();
+
 }
 }

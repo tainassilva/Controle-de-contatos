@@ -7,6 +7,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.taina.exception.contato.ContatoNotFoundException;
+import br.com.taina.exception.pessoa.PessoaNotFoundException;
 import br.com.taina.model.Contato;
 import br.com.taina.model.Pessoa;
 import br.com.taina.repository.ContatoRepository;
@@ -21,21 +23,25 @@ public class ContatoService {
 	@Autowired
 	PessoaRepository pessoaRepository;
 	
+	
 	public Contato save(Contato contato) {        
 	    // Verificar se o contato tem uma pessoa associada
 	    if (contato.getPessoa() != null && contato.getPessoa().getIdPessoa() != null) {
 	        // Buscar a pessoa no banco de dados
 	        Optional<Pessoa> findPessoa = pessoaRepository.findById(contato.getPessoa().getIdPessoa());
 	     
-	        if (!findPessoa.isPresent()) {
-	            // Se a pessoa não for encontrada, retorna null ou uma mensagem
-	            System.out.println("Pessoa não encontrada");
-	            return null;
-	        } else {
-	            // Se a pessoa existir, atualiza o contato com a pessoa encontrada
+	        
+	        
+	        if (findPessoa.isPresent()) {
+	        	 // Se a pessoa existir, atualiza o contato com a pessoa encontrada
 	            contato.setPessoa(findPessoa.get());
 	            // Salvar o contato no banco (não é o pessoaRepository, e sim o contatoRepository)
 	            return contatoRepository.save(contato);
+	           
+	        } else {
+	        	 // Se a pessoa não for encontrada, retorna null ou uma mensagem
+	        	throw new PessoaNotFoundException("Pessoa com ID " + findPessoa + " não encontrada");
+	          
 	        }            
 	    } else {
 	        // Se não tiver pessoa associada ao contato
@@ -45,10 +51,17 @@ public class ContatoService {
 	}
 
 	//CRUD - Read (leitura individual ou lista)
-	public Optional<Contato> findById(Long id){
-		//select * from produto where id = ?id
-		return contatoRepository.findById(id); 
+	
+	public Contato findById(Long id){
+		 Optional<Contato> contatoOpt = contatoRepository.findById(id);
+	      
+	        if (contatoOpt.isPresent()) {
+	          return contatoOpt.get();
+	         }
+	        throw new ContatoNotFoundException("Contato com ID " + id + " não encontrado");
 	}
+
+	
 	
 	public List<Contato> findAllPessoa(Long idPessoa) {
 	    // Buscar a pessoa pelo ID
@@ -71,13 +84,14 @@ public class ContatoService {
 	    
 	    if (findContato.isPresent()) {
 	        Contato updContato = findContato.get();
+	        
 	        updContato.setTipoContato(contato.getTipoContato());
 	        updContato.setContato(contato.getContato());
 	        
 	        return contatoRepository.save(updContato); // UPDATE
 	    }
 
-		return contatoRepository.save(contato);
+	    throw new ContatoNotFoundException("Contato com ID " + id + " não encontrado");
 	}
 	
 	   // CRUD - Delete
@@ -86,8 +100,7 @@ public class ContatoService {
         if (contatoOpt.isPresent()) {
         	contatoRepository.deleteById(id);
         } else {
-        	System.out.println("Pessoa com id " + id + "não encontrada para exclusão");
-           // throw new IllegalArgumentException("Pessoa com ID " + id + " não encontrada para exclusão.");
+           throw new ContatoNotFoundException("Contato com id " + id + " não encontrada para exclusão.");
         }
     }
 

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import br.com.taina.exception.pessoa.CepInvalidoException;
 import br.com.taina.exception.pessoa.CidadeInvalidaException;
 import br.com.taina.exception.pessoa.NomeInvalidoException;
+import br.com.taina.exception.pessoa.NomeNuloOuVazioException;
 import br.com.taina.exception.pessoa.UfInvalidoException;
 
 @Component
@@ -17,11 +18,12 @@ public class PessoaValidation {
     private static final String regexLetrasEspacos = "^[A-Za-záàãâéèêíóôúçÁÀÂÉÊÍÓÔÚÇ\\s]+$";
     private static final String regexCep = "^[0-9]{5}-?[0-9]{3}$";
 
-   
-    
     // Método de validação para nome
     private boolean isNomeInvalido(String nome) {
-        return nome == null || nome.trim().isEmpty() || !Pattern.matches(regexLetrasEspacos, nome);
+        return !Pattern.matches(regexLetrasEspacos, nome);
+    }
+    private boolean isNomeNuloOuVazio(String nome) {
+    	return nome == null || nome.trim().isEmpty(); 
     }
     
     private boolean isCepInvalido(String cep) {
@@ -43,8 +45,11 @@ public class PessoaValidation {
     public void validarPessoa(Pessoa pessoa) {
         // Verifica os erros e lança exceções específicas
 
+    	if(isNomeNuloOuVazio(pessoa.getNome())){
+    		throw new NomeNuloOuVazioException("Campo vazio ou nulo não permitido! Insira um nome.");
+    	}
         if (isNomeInvalido(pessoa.getNome())) {
-            throw new NomeInvalidoException("Nome inválido! Deve conter apenas letras e não pode estar vazio.");
+            throw new NomeInvalidoException("Nome inválido! Deve conter apenas letras.");
         }
 
         if (isCidadeValida(pessoa.getCidade())) {

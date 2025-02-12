@@ -5,6 +5,7 @@ import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import br.com.taina.contatosEnum.TipoContato;
+import br.com.taina.exception.contato.ContatoNuloOuVazioException;
 import br.com.taina.model.Contato;
 
 public class ContatoValidation {
@@ -20,12 +21,15 @@ public class ContatoValidation {
 	
 	private boolean isTelefoneValido(String telefone) {
 		 return !Pattern.matches(regexCelularETelefoneFixo, telefone);
-
+	}
+	
+	private boolean isContatoNuloOuVazio(String contato) {
+		return contato == null || contato.trim().isEmpty();  
 	}
 	
 	public void validarContato(Contato contato) {
-		if(isTelefoneValido(tipoContato.CELULAR)) {
-			System.out.println("teste");
+		if(isContatoNuloOuVazio(contato.getContato())) {
+			throw new ContatoNuloOuVazioException("Erro! O contato não pode ser nulo ou vazio. Insira um contato.");
 		}
 	}
 }
