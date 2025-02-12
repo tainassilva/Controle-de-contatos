@@ -27,7 +27,7 @@ public class ContatoService {
 	        // Buscar a pessoa no banco de dados
 	        Optional<Pessoa> findPessoa = pessoaRepository.findById(contato.getPessoa().getIdPessoa());
 	     
-	        if (findPessoa.isPresent()) {
+	        if (!findPessoa.isPresent()) {
 	            // Se a pessoa não for encontrada, retorna null ou uma mensagem
 	            System.out.println("Pessoa não encontrada");
 	            return null;
