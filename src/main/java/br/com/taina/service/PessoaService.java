@@ -47,9 +47,10 @@ public class PessoaService {
         if (pessoaOpt.isPresent()) {
           return pessoaOpt.get();
          }
+        else {
         throw new PessoaNotFoundException("Pessoa com ID " + id + " não encontrada");
     }
-    
+}
 
     public PessoaMalaDiretaDTO findPessoaById(Long id) {
         Optional<Pessoa> pessoaOpt = pessoaRepository.findById(id);

@@ -31,17 +31,13 @@ public class PessoaController {
 	public ResponseEntity<Pessoa> save(@RequestBody Pessoa pessoa) {
 	Pessoa pessoas = pessoaService.save(pessoa);
 
-		return ResponseEntity.ok(pessoas); 
+		return ResponseEntity.status(201).body(pessoas);
 }
 
 	@GetMapping 
 	@Operation(summary= "Este endpoint é para listar todas as pessoas cadastradas.")
 	public ResponseEntity<List<Pessoa>> findAll(){
 		List<Pessoa> pessoas = pessoaService.findAll();
-		if(pessoas == null)
-			return ResponseEntity.badRequest().build();
-		if(pessoas.size() == 0)
-			return ResponseEntity.notFound().build();
 		return ResponseEntity.ok(pessoas);
 	}
 	

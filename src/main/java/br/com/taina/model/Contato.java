@@ -32,11 +32,11 @@ public class Contato {
     
     public Contato() {}
 
-    public Contato(Long idContato, TipoContato tipoContato, String contato, Pessoa pessoa) {
+    public Contato(Long idContato, TipoContato tipoContato, String contato) {
 		this.idContato = idContato;
 		this.tipoContato = tipoContato;
 		this.contato = contato;
-		this.pessoa = pessoa;
+		
 	}
     
 

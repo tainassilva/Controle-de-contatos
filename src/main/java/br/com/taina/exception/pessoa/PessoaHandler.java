@@ -1,13 +1,13 @@
 package br.com.taina.exception.pessoa;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import br.com.taina.exception.ErrorResponse;
 
-@RestControllerAdvice
-public class PessoaExceptionHandler {
+@ControllerAdvice
+public class PessoaHandler {
 
 	
 	@ExceptionHandler(PessoaNotFoundException.class)

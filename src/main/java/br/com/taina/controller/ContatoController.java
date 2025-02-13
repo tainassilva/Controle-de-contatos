@@ -1,10 +1,7 @@
 package br.com.taina.controller;
 
 import java.util.List;
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.taina.dto.ContatoDTO;
 import br.com.taina.model.Contato;
-import br.com.taina.model.Pessoa;
 import br.com.taina.service.ContatoService;
 import io.swagger.v3.oas.annotations.Operation;
 
@@ -33,18 +30,16 @@ public class ContatoController {
        
         Contato salvarContato = contatoService.save(contato);
 
-        if (salvarContato != null) {
+  
             return ResponseEntity.status(201).body(salvarContato);
-        } else {
-            return ResponseEntity.badRequest().build();
-        }
+   
     }
 	
 	@GetMapping("/{id}")
 	@Operation(summary= "Este endpoint é para consultar um contato por ID")
-	public ResponseEntity<Contato> findById(@PathVariable Long id) {
-	    Contato contato = contatoService.findById(id); // Aqui você pega a pessoa retornada pelo serviço
-	    return ResponseEntity.ok(contato); // Retorna a pessoa no corpo da resposta
+	public ResponseEntity<ContatoDTO> findById(@PathVariable Long id) {
+	    ContatoDTO contatoDTO = contatoService.findById(id);
+	    return ResponseEntity.ok(contatoDTO); 
 	}
 
 	
@@ -53,10 +48,6 @@ public class ContatoController {
 	public ResponseEntity<List<Contato>> findAllPessoa(@PathVariable Long id) {
 	    List<Contato> findContato = contatoService.findAllPessoa(id);
 	  
-	    if (findContato.isEmpty()) {
-	        return ResponseEntity.noContent().build(); 
-	    }
-	    
 	    return ResponseEntity.ok(findContato);
 	}
 
@@ -66,11 +57,7 @@ public class ContatoController {
 	@Operation(summary = "Este endpoint é para alterar um contato existente")
 	public ResponseEntity<Contato> update(@PathVariable Long id, @RequestBody Contato contato) {
 	    Contato updContato = contatoService.update(id, contato);
-	    
-	    if (updContato == null) {
-	        return ResponseEntity.notFound().build(); // Retorna 404 se o contato não for encontrado
-	    }
-	    
+	   
 	    return ResponseEntity.ok(updContato);
 	}
 
@@ -79,6 +66,5 @@ public class ContatoController {
 	public ResponseEntity<?> delete(@PathVariable Long id){
 		contatoService.delete(id);
 		return ResponseEntity.noContent().build();
-
 }
 }
