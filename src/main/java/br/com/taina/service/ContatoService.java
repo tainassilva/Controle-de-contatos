@@ -2,7 +2,6 @@ package br.com.taina.service;
 
 import java.util.List;
 import java.util.Optional;
-//import java.util.regex.Pattern;// pegar da classe pessoa para validar 
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
