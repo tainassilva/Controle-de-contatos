@@ -1,6 +1,12 @@
 package br.com.taina;
 
 import org.junit.jupiter.api.Test;
+
+import br.com.taina.enums.TipoContato;
+import br.com.taina.exception.contato.TelefoneFormatoInvalidoException;
+import br.com.taina.model.Contato;
+import br.com.taina.validation.contato.ContatoValidation;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ContatoValidationTest {
@@ -12,7 +18,7 @@ public class ContatoValidationTest {
         
         ContatoValidation validator = new ContatoValidation();
         
-        // Espera que não lance exceções
+        // Espera que não exceções
         assertDoesNotThrow(() -> validator.validarContato(contato));
     }
 
