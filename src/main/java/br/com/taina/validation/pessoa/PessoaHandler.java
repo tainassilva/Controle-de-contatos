@@ -1,13 +1,20 @@
-package br.com.taina.exception.pessoa;
+package br.com.taina.validation.pessoa;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import br.com.taina.exception.ErrorResponse;
+import br.com.taina.exception.pessoa.CepInvalidoException;
+import br.com.taina.exception.pessoa.CidadeInvalidaException;
+import br.com.taina.exception.pessoa.NomeInvalidoException;
+import br.com.taina.exception.pessoa.NomeNuloOuVazioException;
+import br.com.taina.exception.pessoa.PessoaNotFoundException;
+import br.com.taina.exception.pessoa.UfInvalidoException;
+import br.com.taina.validation.ErrorResponse;
 
 /**
- * Classe responsável por capturar e tratar exceções relacionadas a Pessoa.
+ * Classe responsável por manipular exceções relacionadas a contatos.
+ * Captura as exceções específicas e retorna respostas HTTP apropriadas.
  */
 @ControllerAdvice
 public class PessoaHandler {
@@ -20,7 +27,7 @@ public class PessoaHandler {
      */
     @ExceptionHandler(PessoaNotFoundException.class)
     public ResponseEntity<ErrorResponse> handlePessoaNaoEncontrada(PessoaNotFoundException ex) {
-        ErrorResponse error = new ErrorResponse(404, "Pessoa não encontrada: " + ex.getMessage());
+        ErrorResponse error = new ErrorResponse(404, ex.getMessage());
         return ResponseEntity.status(404).body(error);
     }
 
@@ -32,7 +39,7 @@ public class PessoaHandler {
      */
     @ExceptionHandler(NomeNuloOuVazioException.class)
     public ResponseEntity<ErrorResponse> handleNomeNuloOuVazio(NomeNuloOuVazioException ex) {
-        ErrorResponse error = new ErrorResponse(400, "O nome da pessoa não pode ser nulo ou vazio: " + ex.getMessage());
+        ErrorResponse error = new ErrorResponse(400, ex.getMessage());
         return ResponseEntity.badRequest().body(error);
     }
 
@@ -44,7 +51,7 @@ public class PessoaHandler {
      */
     @ExceptionHandler(NomeInvalidoException.class)
     public ResponseEntity<ErrorResponse> handleNomeInvalido(NomeInvalidoException ex) {
-        ErrorResponse error = new ErrorResponse(422, "Nome inválido: " + ex.getMessage());
+        ErrorResponse error = new ErrorResponse(422, ex.getMessage());
         return ResponseEntity.unprocessableEntity().body(error);
     }
 
@@ -56,7 +63,7 @@ public class PessoaHandler {
      */
     @ExceptionHandler(CidadeInvalidaException.class)
     public ResponseEntity<ErrorResponse> handleCidadeInvalida(CidadeInvalidaException ex) {
-        ErrorResponse error = new ErrorResponse(400, "Cidade inválida: " + ex.getMessage());
+        ErrorResponse error = new ErrorResponse(400,  ex.getMessage());
         return ResponseEntity.badRequest().body(error);
     }
 
@@ -68,7 +75,7 @@ public class PessoaHandler {
      */
     @ExceptionHandler(CepInvalidoException.class)
     public ResponseEntity<ErrorResponse> handleCepInvalido(CepInvalidoException ex) {
-        ErrorResponse error = new ErrorResponse(422, "CEP inválido: " + ex.getMessage());
+        ErrorResponse error = new ErrorResponse(422, ex.getMessage());
         return ResponseEntity.unprocessableEntity().body(error);
     }
 
@@ -80,19 +87,7 @@ public class PessoaHandler {
      */
     @ExceptionHandler(UfInvalidoException.class)
     public ResponseEntity<ErrorResponse> handleUfInvalido(UfInvalidoException ex) {
-        ErrorResponse error = new ErrorResponse(400, "UF inválida: " + ex.getMessage());
+        ErrorResponse error = new ErrorResponse(400, ex.getMessage());
         return ResponseEntity.badRequest().body(error);
-    }
-
-    /**
-     * Manipula a exceção para erros internos do servidor.
-     *
-     * @param ex A exceção {@link ErroServidorException} lançada quando ocorre um erro inesperado no sistema.
-     * @return Um {@link ResponseEntity} contendo o código de status 500 (Internal Server Error) e uma mensagem de erro.
-     */
-    @ExceptionHandler(ErroServidorException.class)
-    public ResponseEntity<ErrorResponse> handleErroServidor(ErroServidorException ex) {
-        ErrorResponse error = new ErrorResponse(500, "Erro interno no servidor: " + ex.getMessage());
-        return ResponseEntity.status(500).body(error);
     }
 }

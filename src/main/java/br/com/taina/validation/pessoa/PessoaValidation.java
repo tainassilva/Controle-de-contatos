@@ -1,11 +1,11 @@
-package br.com.taina.validation;
+package br.com.taina.validation.pessoa;
 
-import br.com.taina.contatosEnum.Estados;
 import br.com.taina.model.Pessoa;
 import java.util.regex.Pattern;
 
 import org.springframework.stereotype.Component;
 
+import br.com.taina.enums.Estados;
 import br.com.taina.exception.pessoa.CepInvalidoException;
 import br.com.taina.exception.pessoa.CidadeInvalidaException;
 import br.com.taina.exception.pessoa.NomeInvalidoException;

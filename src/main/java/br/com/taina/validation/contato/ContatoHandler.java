@@ -1,11 +1,23 @@
-package br.com.taina.exception.contato;
+package br.com.taina.validation.contato;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import br.com.taina.exception.ErrorResponse;
+import br.com.taina.exception.contato.ContatoNotFoundException;
+import br.com.taina.exception.contato.ContatoNuloOuVazioException;
+import br.com.taina.exception.contato.EmailFormatoInvalidoException;
+import br.com.taina.exception.contato.LinkedInFormatoInvalidoException;
+import br.com.taina.exception.contato.SemContatoAssociadoException;
+import br.com.taina.exception.contato.TelefoneFormatoInvalidoException;
+import br.com.taina.exception.contato.TipoContatoInvalidoException;
+import br.com.taina.exception.contato.TipoContatoNuloException;
+import br.com.taina.validation.ErrorResponse;
 
+/**
+ * Classe responsável por manipular exceções relacionadas a contatos.
+ * Captura as exceções específicas e retorna respostas HTTP apropriadas.
+ */
 @ControllerAdvice
 public class ContatoHandler {
 
@@ -17,7 +29,7 @@ public class ContatoHandler {
      */
     @ExceptionHandler(ContatoNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleContatoNaoEncontrado(ContatoNotFoundException ex) {
-        ErrorResponse error = new ErrorResponse(404, "Contato não encontrado: " + ex.getMessage());
+        ErrorResponse error = new ErrorResponse(404, ex.getMessage());
         return ResponseEntity.status(404).body(error);
     }
 
@@ -29,7 +41,7 @@ public class ContatoHandler {
      */
     @ExceptionHandler(TelefoneFormatoInvalidoException.class)
     public ResponseEntity<ErrorResponse> handleTelefoneFormatoInvalido(TelefoneFormatoInvalidoException ex) {
-        ErrorResponse error = new ErrorResponse(422, "Formato de telefone inválido: " + ex.getMessage());
+        ErrorResponse error = new ErrorResponse(422, ex.getMessage());
         return ResponseEntity.unprocessableEntity().body(error);
     }
 
@@ -41,7 +53,7 @@ public class ContatoHandler {
      */
     @ExceptionHandler(ContatoNuloOuVazioException.class)
     public ResponseEntity<ErrorResponse> handleContatoNuloOuVazio(ContatoNuloOuVazioException ex) {
-        ErrorResponse error = new ErrorResponse(400, "O contato não pode ser nulo ou vazio: " + ex.getMessage());
+        ErrorResponse error = new ErrorResponse(400, ex.getMessage());
         return ResponseEntity.badRequest().body(error);
     }
 
@@ -53,7 +65,7 @@ public class ContatoHandler {
      */
     @ExceptionHandler(EmailFormatoInvalidoException.class)
     public ResponseEntity<ErrorResponse> handleEmailFormatoInvalido(EmailFormatoInvalidoException ex) {
-        ErrorResponse error = new ErrorResponse(422, "Formato de e-mail inválido: " + ex.getMessage());
+        ErrorResponse error = new ErrorResponse(422, ex.getMessage());
         return ResponseEntity.unprocessableEntity().body(error);
     }
 
@@ -65,7 +77,7 @@ public class ContatoHandler {
      */
     @ExceptionHandler(TipoContatoNuloException.class)
     public ResponseEntity<ErrorResponse> handleContatoNulo(TipoContatoNuloException ex) {
-        ErrorResponse error = new ErrorResponse(400, "O tipo de contato não pode ser nulo: " + ex.getMessage());
+        ErrorResponse error = new ErrorResponse(400, ex.getMessage());
         return ResponseEntity.badRequest().body(error);
     }
 
@@ -77,8 +89,31 @@ public class ContatoHandler {
      */
     @ExceptionHandler(SemContatoAssociadoException.class)
     public ResponseEntity<ErrorResponse> handleSemContatoAssociado(SemContatoAssociadoException ex) {
-        ErrorResponse error = new ErrorResponse(204, "Erro: " + ex.getMessage());
+        ErrorResponse error = new ErrorResponse(204, ex.getMessage());
         return ResponseEntity.badRequest().body(error);
     }
     
+    /**
+     * Manipula a exceção para formato inválido de linkedIn
+     *
+     * @param ex A exceção {@link LinkedInFormatoInvalidoException} lançada quando o linkedLn não segue um formato válido.
+     * @return Um {@link ResponseEntity} contendo o código de status 422 (Unprocessable Entity) e uma mensagem de erro.
+     */
+    @ExceptionHandler(LinkedInFormatoInvalidoException.class)
+    public ResponseEntity<ErrorResponse> handleLinkedInFormatoInvalido(LinkedInFormatoInvalidoException ex) {
+        ErrorResponse error = new ErrorResponse(422, ex.getMessage());
+        return ResponseEntity.badRequest().body(error);
+    }
+    
+    /**
+     * Manipula a exceção para caso o valor esteja fora do enum
+     *
+     * @param ex A exceção {@link LinkedInFormatoInvalidoException} lançada quando o linkedLn não segue um formato válido.
+     * @return Um {@link ResponseEntity} contendo o código de status 404 (Unprocessable Entity) e uma mensagem de erro.
+     */
+    @ExceptionHandler(TipoContatoInvalidoException.class)
+    public ResponseEntity<ErrorResponse> handleTipoContatoInvalido(TipoContatoInvalidoException ex) {
+        ErrorResponse error = new ErrorResponse(400, ex.getMessage());
+        return ResponseEntity.badRequest().body(error);
+    }
 }

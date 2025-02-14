@@ -1,13 +1,15 @@
-package br.com.taina.validation;
+package br.com.taina.validation.contato;
 
 import java.util.regex.Pattern;
 
 import org.springframework.stereotype.Component;
 
-import br.com.taina.contatosEnum.TipoContato;
 import br.com.taina.exception.contato.TelefoneFormatoInvalidoException;
+import br.com.taina.exception.contato.TipoContatoInvalidoException;
+import br.com.taina.enums.TipoContato;
 import br.com.taina.exception.contato.ContatoNuloOuVazioException;
 import br.com.taina.exception.contato.EmailFormatoInvalidoException;
+import br.com.taina.exception.contato.LinkedInFormatoInvalidoException;
 import br.com.taina.exception.contato.TipoContatoNuloException;
 import br.com.taina.model.Contato;
 
@@ -50,23 +52,31 @@ public class ContatoValidation {
 		if(isTipoContatoNulo(contato.getTipoContato())) {
 			throw new TipoContatoNuloException("Erro! O tipo de contato não pode ser nulo.");
 		}
-		if (contato.getTipoContato() == TipoContato.CELULAR ||  contato.getTipoContato() == TipoContato.TELEFONE_FIXO) {
-		    if (isTelefoneValido(contato.getContato())) {
-		        throw new TelefoneFormatoInvalidoException("Erro! Formato inválido. Insira um formato de telefone válido: 10 digitos para "
-		        		+ "telefone incluindo o ddd e 11 para telefone celular");
-		    }
-		}
 		
-		if(contato.getTipoContato() == TipoContato.EMAIL) {
-			if(isEmailValido(contato.getContato())) {
-				throw new EmailFormatoInvalidoException("Erro! Formato inválido. Insira um email válido! Exemplo do formato : teste@email.com");
-			}
-		}
-		
-		if(contato.getTipoContato() == TipoContato.LINKEDLN) {
-			if( isLinkedlnValido(contato.getContato())) {
-				throw new EmailFormatoInvalidoException("Erro! O formato do LinkedIn está inválido. Use um formato correto, como: https://www.linkedin.com/in/joao-silva");
-			}
+		switch (contato.getTipoContato()) {
+	    case CELULAR:
+	    case TELEFONE_FIXO:
+	        if (isTelefoneValido(contato.getContato())) {
+	            throw new TelefoneFormatoInvalidoException("Erro! Formato inválido. Insira um formato de telefone válido: 10 digitos para "
+	                    + "telefone incluindo o ddd e 11 para telefone celular");
+	        }
+	        break;
+	    
+	    case EMAIL:
+	        if (isEmailValido(contato.getContato())) {
+	            throw new EmailFormatoInvalidoException("Erro! Formato inválido. Insira um email válido! Exemplo do formato : teste@email.com");
+	        }
+	        break;
+	    
+	    case LINKEDIN:
+	        if (isLinkedlnValido(contato.getContato())) {
+	            throw new LinkedInFormatoInvalidoException("Erro! O formato do LinkedIn está inválido. Use um formato correto, como: www.linkedin.com/in/usuario-linkedin");
+	        }
+	        break;
+	    
+	    default:
+	        // Caso o tipo de contato não seja nenhum dos mencionados
+	        throw new TipoContatoInvalidoException("Tipo de contato inválido! Insira um contato válido.");
 		}
 	}
 }

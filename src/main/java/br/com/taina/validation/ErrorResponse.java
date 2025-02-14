@@ -1,7 +1,13 @@
-package br.com.taina.exception;
+package br.com.taina.validation;
 
+/**
+ * Classe que representa uma resposta de erro padronizada.
+ * Contém um código de status HTTP e uma mensagem associada ao erro.
+ */
 public class ErrorResponse {
+    
     private int statusCode;
+    
     private String message;
 
     public ErrorResponse(int statusCode, String message) {
@@ -9,7 +15,6 @@ public class ErrorResponse {
         this.message = message;
     }
 
-    // Getters e setters
     public int getStatusCode() {
         return statusCode;
     }
