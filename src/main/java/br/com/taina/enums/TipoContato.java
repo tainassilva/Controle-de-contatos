@@ -6,4 +6,15 @@ package br.com.taina.enums;
 public enum TipoContato {
 
 	TELEFONE_FIXO, CELULAR, EMAIL, LINKEDIN;
-}
+	
+	    public static TipoContato fromString(String value) {
+	        for (TipoContato tipo : TipoContato.values()) {
+	            if (tipo.name().equalsIgnoreCase(value)) {
+	                return tipo;
+	            }
+	        }
+	        throw new IllegalArgumentException("Tipo de contato inválido: " + value);
+	    }
+	}
+
+

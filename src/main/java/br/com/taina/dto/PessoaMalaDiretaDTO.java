@@ -8,7 +8,7 @@ import br.com.taina.model.Pessoa;
  * por isso não há necessidade de setters. 
  * Este DTO é utilizado para retornar os dados concatenados . 
  */
-public record PessoaMalaDiretaDTO(Long idPessoa, String nome, String malaDireta) {
+public record PessoaMalaDiretaDTO(Long id, String nome, String malaDireta) {
 
     /**
      * Construtor que cria um objeto {@link PessoaMalaDiretaDTO} a partir da instância de {@link Pessoa}.
@@ -17,7 +17,7 @@ public record PessoaMalaDiretaDTO(Long idPessoa, String nome, String malaDireta)
      * @param pessoa Objeto {@link Pessoa} contem as informações da pessoa.
      */
     public PessoaMalaDiretaDTO(Pessoa pessoa) {
-        this(pessoa.getIdPessoa(), 
+        this(pessoa.getId(), 
              pessoa.getNome(), 
              pessoa.getEndereco() + " – CEP: " + pessoa.getCep() + " – " + pessoa.getCidade() + " / " + pessoa.getUf());
     }

@@ -32,5 +32,11 @@ public interface ContatoRepository extends JpaRepository<Contato, Long> {
      * 
      * A ideia é fazer um inner join ... 
      */
-    List<Contato> findByPessoa(Pessoa pessoa);
+	
+//	@Query("SELECT new br.com.taina.dto.ContatoDTO(c.tipoContato, c.contato) " +
+//		       "FROM Contato c JOIN c.pessoa p WHERE p.id = :idPessoa")
+//		List<ContatoDTO> findContatosByPessoaId(@Param("idPessoa") Long idPessoa);
+	
+		  List<Contato> findByPessoaId(Long id); 
 }
+

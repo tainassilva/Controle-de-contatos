@@ -1,8 +1,11 @@
 package br.com.taina.model;
 
 import br.com.taina.enums.Estados;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * Representa uma pessoa mapeada para uma tabela no banco de dados. Contém informações pessoais, como nome, endereço, 
@@ -13,86 +16,55 @@ import java.util.List;
  * ter um tipo específico ( telefone fixo ,celular, e-mail e linkedIn), conforme definido no {@link TipoContato}.</p>
  */
 @Entity
+@Schema(hidden = true)
 public class Pessoa {
 
-    /**
-     * Identificador único da pessoa.
-     * Esse campo é gerado automaticamente pelo banco de dados.
-     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idPessoa;
+    private Long id;
 
-    /**
-     * Nome da pessoa.
-     * Esse campo é obrigatório.
-     */
+   
     @Column(nullable = false)
     private String nome;
 
-    /**
-     * Endereço da pessoa.
-     * Este campo é opcional.
-     */
     private String endereco;
-
-    /**
-     * Código postal (CEP) da pessoa.
-     * Este campo é opcional.
-     */
     private String cep;
-
-    /**
-     * Cidade onde a pessoa reside.
-     * Este campo é opcional.
-     */
     private String cidade;
 
-    /**
-     * Estado (UF) onde a pessoa reside, representado pelo enum {@link Estados}.
-     * Este campo é opcional.
-     */
     @Enumerated(EnumType.STRING)
     private Estados uf;
 
-    /**
-     * Lista de contatos associados a esta pessoa.
-     * Relacionamento um-para-muitos com a entidade {@link Contato}.
-     * Cada pessoa pode ter múltiplos contatos.
-     * 
-     * A anotação {@link OneToMany} indica que este é um relacionamento um-para-muitos,
-     * ou seja, uma pessoa pode ter vários contatos. O parâmetro "cascade = CascadeType.ALL" 
-     * garante que todas as operações de persistência (como salvar, atualizar, deletar) realizadas
-     * na entidade {@link Pessoa} sejam automaticamente propagadas para os contatos associados.
-     * O parâmetro "mappedBy = 'pessoa'" informa que o lado "muitos" (Contato) é o responsável 
-     * pela referência ao lado "um" (Pessoa). Ou seja, o atributo "pessoa" na entidade Contato
-     * mapeia essa relação. O parâmetro "targetEntity = Contato.class" define explicitamente 
-     * a entidade alvo do relacionamento.
-     */
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "pessoa", targetEntity = Contato.class)
     private List<Contato> contatos;
 
     public Pessoa() {}
     
-    public Pessoa(Long idPessoa, String nome, String endereco, String cep, String cidade, Estados uf, List<Contato> contatos) {
-        this.idPessoa = idPessoa;
-        this.nome = nome;
-        this.endereco = endereco;
-        this.cep = cep;
-        this.cidade = cidade;
-        this.uf = uf;
-        this.contatos = contatos;
-    }
 
-    public Long getIdPessoa() {
-        return idPessoa;
-    }
+    public Pessoa(Long id, String nome, String endereco, String cep, String cidade, Estados uf,
+			List<Contato> contatos) {
+		super();
+		this.id = id;
+		this.nome = nome;
+		this.endereco = endereco;
+		this.cep = cep;
+		this.cidade = cidade;
+		this.uf = uf;
+		this.contatos = contatos;
+	}
 
-    public void setIdPessoa(Long idPessoa) {
-        this.idPessoa = idPessoa;
-    }
 
-    public String getNome() {
+
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getNome() {
         return nome;
     }
 
@@ -131,10 +103,20 @@ public class Pessoa {
     public void setUf(Estados uf) {
         this.uf = uf;
     }
+    
+    
 
-    @Override
-    public String toString() {
-        return "Pessoa [idPessoa=" + idPessoa + ", nome=" + nome + ", endereco=" + endereco + ", cep=" + cep
-                + ", cidade=" + cidade + ", uf=" + uf + ", contatos=" + contatos + "]";
-    }
+    public List<Contato> getContatos() {
+		return contatos;
+	}
+
+	public void setContatos(List<Contato> contatos) {
+		this.contatos = contatos;
+	}
+
+	@Override
+	public String toString() {
+		return "Pessoa [id=" + id + ", nome=" + nome + ", endereco=" + endereco + ", cep=" + cep + ", cidade=" + cidade
+				+ ", uf=" + uf + "]";
+	}
 }

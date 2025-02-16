@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import br.com.taina.dto.ContatoDTO;
-import br.com.taina.model.Contato;
 import br.com.taina.service.ContatoService;
 import io.swagger.v3.oas.annotations.Operation;
 
@@ -16,7 +15,7 @@ import io.swagger.v3.oas.annotations.Operation;
  * 
  * Os status de erro HTTP são tratados na classe {@link br.com.taina.validation.contato.ContatoHandler},
  * que caso sejam encontrados dados inadequados, utiliza as validações definidas na classe 
- * {@link br.com.taina.validation.contato.ContatoValidation}, lançando exceções personalizadas do 
+ * {@link br.com.taina.validation.ContatoValidation}, lançando exceções personalizadas do 
  * pacote {@link br.com.taina.validation.exception.contato}.
  */
 @RestController
@@ -33,12 +32,12 @@ public class ContatoController {
      * @return ResponseEntity contendo o contato salvo e o status 201 (Created).
      * 
      * Em caso de erros HTTP, pode ser devido a falhas no servidor ou validações definidas 
-     * na classe {@link br.com.taina.validation.contato.ContatoValidation}.
+     * na classe {@link br.com.taina.validation.ContatoValidation}.
      */
     @PostMapping
     @Operation(summary = "Salva um novo contato para uma pessoa")
-    public ResponseEntity<Contato> save(@RequestBody Contato contato) {
-        Contato salvarContato = contatoService.save(contato);
+    public ResponseEntity<ContatoDTO> save(@RequestBody ContatoDTO contatoDTO) {
+        ContatoDTO salvarContato = contatoService.save(contatoDTO);
         return ResponseEntity.status(201).body(salvarContato);
     }
 
@@ -62,13 +61,13 @@ public class ContatoController {
      * @return ResponseEntity contendo a lista de contatos encontrados.
      * 
      * Em caso de erros HTTP, pode ser devido a falhas no servidor ou validações definidas na 
-     * classe {@link br.com.taina.validation.contato.ContatoValidation}, que são as mesmas aplicadas 
+     * classe {@link br.com.taina.validation.ContatoValidation}, que são as mesmas aplicadas 
      * ao salvar um contato.
      */
-    @GetMapping("pessoa/{id}")
+    @GetMapping("pessoa/{idPessoa}")
     @Operation(summary = "Lista todos os contatos de uma pessoa")
-    public ResponseEntity<List<Contato>> findAllPessoa(@PathVariable Long id) {
-        List<Contato> findContato = contatoService.findAllByPessoaId(id);
+    public ResponseEntity<List<ContatoDTO>> findAllContactsPessoas(@PathVariable Long idPessoa) {
+        List<ContatoDTO> findContato = contatoService.findAllByPessoaId(idPessoa);
         return ResponseEntity.ok(findContato);
     }
 
@@ -81,8 +80,8 @@ public class ContatoController {
      */
     @PutMapping("/{id}")
     @Operation(summary = "Atualiza um contato existente")
-    public ResponseEntity<Contato> update(@PathVariable Long id, @RequestBody Contato contato) {
-        Contato updContato = contatoService.update(id, contato);
+    public ResponseEntity<ContatoDTO> update(@PathVariable Long id, @RequestBody ContatoDTO contatoDTO) {
+        ContatoDTO updContato = contatoService.update(id, contatoDTO);
         return ResponseEntity.ok(updContato);
     }
 

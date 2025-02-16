@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import br.com.taina.dto.PessoaDTO;
 import br.com.taina.dto.PessoaMalaDiretaDTO;
 import br.com.taina.model.Pessoa;
 import br.com.taina.service.PessoaService;
@@ -17,7 +18,7 @@ import io.swagger.v3.oas.annotations.Operation;
  * 
  * Os status de erro HTTP são tratados na classe {@link br.com.taina.validation.pessoa.PessoaHandler},
  * que caso sejam encontrados dados inadequados, utiliza as validações definidas na classe 
- * {@link br.com.taina.validation.pessoa.PessoaValidation}, lançando exceções personalizadas do 
+ * {@link br.com.taina.validation.PessoaValidation}, lançando exceções personalizadas do 
  * pacote {@link br.com.taina.validation.exception.pessoa}.
  */
 
@@ -35,12 +36,12 @@ public class PessoaController {
      * @return ResponseEntity contendo a pessoa cadastrada e o status 201 (Created).
      * 
      * Em caso de erros HTTP, pode ser devido a falhas no servidor ou validações definidas 
-     * na classe {@link br.com.taina.validation.pessoa.PessoaValidation}.
+     * na classe {@link br.com.taina.validation.PessoaValidation}.
      */
     @PostMapping
     @Operation(summary = "Cadastro de uma nova pessoa")
-    public ResponseEntity<Pessoa> save(@RequestBody Pessoa pessoa) {
-        Pessoa pessoaCadastrada = pessoaService.save(pessoa);
+    public ResponseEntity<PessoaDTO> save(@RequestBody PessoaDTO pessoaDTO) {
+    	PessoaDTO pessoaCadastrada = pessoaService.save(pessoaDTO);
         return ResponseEntity.status(201).body(pessoaCadastrada);
     }
 
@@ -64,9 +65,10 @@ public class PessoaController {
      */
     @GetMapping("/{id}")
     @Operation(summary = "Consulta uma pessoa pelo ID")
-    public ResponseEntity<Pessoa> findById(@PathVariable Long id) {
-        Pessoa pessoa = pessoaService.findById(id);
-        return ResponseEntity.ok(pessoa);
+    public ResponseEntity<PessoaDTO> findById(@PathVariable Long id) {
+        PessoaDTO pessoaDTO = pessoaService.findById(id);
+		return ResponseEntity.ok(pessoaDTO);
+
     }
 
     /**
@@ -90,13 +92,13 @@ public class PessoaController {
      * @return ResponseEntity contendo a pessoa atualizada ou status 404 se não for encontrada.
      * 
      * Em caso de erros HTTP, pode ser devido a falhas no servidor ou validações definidas na 
-     * classe {@link br.com.taina.validation.pessoa.PessoaValidation}, que são as mesmas aplicadas 
+     * classe {@link br.com.taina.validation.PessoaValidation}, que são as mesmas aplicadas 
      * ao salvar uma pessoa.
      */
     @PutMapping("/{id}")
     @Operation(summary = "Atualiza as informações de uma pessoa")
-    public ResponseEntity<Pessoa> update(@PathVariable Long id, @RequestBody Pessoa pessoa) {
-        Pessoa pessoaAtualizada = pessoaService.update(id, pessoa);
+    public ResponseEntity<PessoaDTO> update(@PathVariable Long id, @RequestBody PessoaDTO pessoaDTO) {
+        PessoaDTO pessoaAtualizada = pessoaService.update(id, pessoaDTO);
 
         return ResponseEntity.ok(pessoaAtualizada);
     }

@@ -1,6 +1,7 @@
 package br.com.taina.model;
 
 import br.com.taina.enums.TipoContato;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 
 /**
@@ -13,6 +14,7 @@ import jakarta.persistence.*;
  * Esta classe é usada para armazenar e manipular as informações relacionadas ao contato de uma pessoa.</p>
  */
 @Entity
+@Schema(hidden = true)
 public class Contato {
 
     /**
@@ -21,7 +23,7 @@ public class Contato {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) 
-    private Long idContato;
+    private Long id;
 
     /**
      * Tipo de contato, que pode ser definido conforme os Enums no {@link TipoContato}.
@@ -48,13 +50,15 @@ public class Contato {
 
     public Contato() {}
 
-    public Contato(Long idContato, TipoContato tipoContato, String contato) {
-        this.idContato = idContato;
-        this.tipoContato = tipoContato;
-        this.contato = contato;
-    }
+  
+    public Contato(Long id, TipoContato tipoContato, String contato, Pessoa pessoa) {
+		this.tipoContato = tipoContato;
+		this.contato = contato;
+		this.pessoa = pessoa;
+	}
 
-    // Getters e Setters
+
+	// Getters e Setters
 
     public TipoContato getTipoContato() {
         return tipoContato;
@@ -64,15 +68,17 @@ public class Contato {
         this.tipoContato = tipoContato;
     }
 
-    public Long getIdContato() {
-        return idContato;
-    }
+  
 
-    public void setIdContato(Long idContato) {
-        this.idContato = idContato;
-    }
+    public Long getId() {
+		return id;
+	}
 
-    public String getContato() {
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getContato() {
         return contato;
     }
 
@@ -95,6 +101,6 @@ public class Contato {
      */
     @Override
     public String toString() {
-        return "Contato [id=" + idContato + ", tipoContato=" + tipoContato + ", contato=" + contato + ", pessoa=" + pessoa + "]";
+        return "Contato [id=" + id + ", tipoContato=" + tipoContato + ", contato=" + contato + ", pessoa=" + pessoa + "]";
     }
 }

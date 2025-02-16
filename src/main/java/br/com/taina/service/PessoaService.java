@@ -1,14 +1,18 @@
 package br.com.taina.service;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.taina.dto.PessoaDTO;
 import br.com.taina.dto.PessoaMalaDiretaDTO;
 import br.com.taina.exception.ErroServidorException;
-import br.com.taina.exception.pessoa.PessoaNotFoundException;
+import br.com.taina.exception.FormatoInvalidoException;
+import br.com.taina.exception.IdNotFoundException;
+import br.com.taina.exception.NotNullException;
 import br.com.taina.model.Pessoa;
 import br.com.taina.repository.PessoaRepository;
-import br.com.taina.validation.pessoa.PessoaValidation;
+import br.com.taina.validation.PessoaValidation;
 
 import java.util.List;
 import java.util.Optional;
@@ -36,15 +40,33 @@ public class PessoaService {
      * @return A pessoa salva com os dados persistidos.
      * @throws ErroServidorException Caso ocorra um erro durante a operação de salvamento.
      */
-    public Pessoa save(Pessoa pessoa) {
-        // Valida os dados da pessoa antes de salvar
-        pessoaValidation.validarPessoa(pessoa);
+    public PessoaDTO save(PessoaDTO pessoaDTO) {
         try {
-            return pessoaRepository.save(pessoa);
-        } catch (Exception e) {
-            throw new ErroServidorException(e.getMessage());
+            // Valida os dados da pessoa
+            pessoaValidation.validarPessoaDTO(pessoaDTO);
+
+            // Converte o DTO para entidade
+            Pessoa pessoa = new Pessoa();
+            BeanUtils.copyProperties(pessoaDTO, pessoa);
+
+            // Salva no banco
+            pessoa = pessoaRepository.save(pessoa);
+
+            // Retorna o DTO com os dados salvos
+            return new PessoaDTO(pessoa.getId(), pessoa.getNome(), pessoa.getEndereco(),
+                                  pessoa.getCep(), pessoa.getCidade(), pessoa.getUf());
+        } catch (FormatoInvalidoException e) {
+            // Lança exceções específicas de validação
+            throw new FormatoInvalidoException(e.getMessage());
+        }  catch (NotNullException e) {
+            // Lança exceções específicas de validação
+            throw new NotNullException(e.getMessage());
+        }catch (ErroServidorException e) {
+            // Lança exceção genérica para qualquer outro erro
+            throw new ErroServidorException("Erro ao salvar a pessoa: " + e.getMessage());
         }
     }
+
     /**
      * Retorna todas as pessoas registradas no banco de dados.
      * 
@@ -56,7 +78,8 @@ public class PessoaService {
     		return pessoaRepository.findAll();
     	} catch (Exception e) {
             throw new ErroServidorException(e.getMessage());
-        }
+        
+    	}
     }
 
     /**
@@ -67,21 +90,29 @@ public class PessoaService {
      * @throws PessoaNotFoundException Se a pessoa com o ID informado não for encontrada.
      * @throws ErroServidorException Caso ocorra um erro durante a operação de consulta.
      */
-    public Pessoa findById(Long id) {
+    public PessoaDTO findById(Long id) {
         Optional<Pessoa> pessoaOpt = pessoaRepository.findById(id);
       
         if (pessoaOpt.isPresent()) {
-        	try {
-        		//Retorna a pessoa do id correspondente que entrou no parâmetro
-        		return pessoaOpt.get();
-        	}catch (Exception e) {
-        		throw new ErroServidorException(e.getMessage());
-        	}
+            try {
+                Pessoa pessoa = pessoaOpt.get();
+                PessoaDTO pessoaDTO = new PessoaDTO();
+                
+                pessoaDTO.setId(pessoa.getId());
+                pessoaDTO.setNome(pessoa.getNome());
+                pessoaDTO.setEndereco(pessoa.getEndereco());
+                pessoaDTO.setCep(pessoa.getCep());
+                pessoaDTO.setCidade(pessoa.getCidade());
+                pessoaDTO.setUf(pessoa.getUf());
+                
+                return pessoaDTO;
+            } catch (ErroServidorException e) {
+                throw new ErroServidorException(e.getMessage());
+            }
         } else {
-        	throw new PessoaNotFoundException("Pessoa com ID " + id + " não encontrada");
+            throw new IdNotFoundException("Pessoa com ID " + id + " não encontrada");
         }
     }
-
     /**
      * Busca uma pessoa pelo ID e retorna os dados no formato de DTO {@link PessoaMalaDiretaDTO}.
      * Se a pessoa não for encontrada, lança uma exceção.
@@ -103,7 +134,7 @@ public class PessoaService {
                 throw new ErroServidorException(e.getMessage());
             }
         } else {
-            throw new PessoaNotFoundException("Pessoa com ID " + id + " não encontrada");
+            throw new IdNotFoundException("Pessoa com ID " + id + " não encontrada");
         }
     }
 
@@ -118,32 +149,39 @@ public class PessoaService {
      * @throws PessoaNotFoundException Se a pessoa com o ID informado não for encontrada.
      * @throws ErroServidorException Caso ocorra um erro durante a operação de atualização.
      */
-    public Pessoa update(Long id, Pessoa pessoa) {
+    public PessoaDTO update(Long id, PessoaDTO pessoaDTO) {
         Optional<Pessoa> findPessoa = pessoaRepository.findById(id);
-        
-        Pessoa updPessoa = new Pessoa();
         
         if (findPessoa.isPresent()) {
             // Valida os dados da pessoa antes de atualizar
-            pessoaValidation.validarPessoa(pessoa);
-            updPessoa = findPessoa.get();
-            // Atualiza os dados da pessoa
-            updPessoa.setNome(pessoa.getNome());
-            updPessoa.setEndereco(pessoa.getEndereco());
-            updPessoa.setCep(pessoa.getCep());
-            updPessoa.setCidade(pessoa.getCidade());
-            updPessoa.setUf(pessoa.getUf());
-        } else {
-            throw new PessoaNotFoundException("Pessoa com ID " + id + " não encontrada para a atualização!");
-        }
+            pessoaValidation.validarPessoaDTO(pessoaDTO);
 
-        try {
-            // Salva a pessoa atualizada no banco de dados
-            return pessoaRepository.save(updPessoa);
-        } catch (Exception e) {
-            throw new ErroServidorException(e.getMessage());
+            Pessoa updPessoa = findPessoa.get();  // Agora o objeto `updPessoa` é o encontrado no banco
+
+            // Atualiza os dados da pessoa com as informações do DTO
+            updPessoa.setNome(pessoaDTO.getNome());
+            updPessoa.setEndereco(pessoaDTO.getEndereco());
+            updPessoa.setCep(pessoaDTO.getCep());
+            updPessoa.setCidade(pessoaDTO.getCidade());
+            updPessoa.setUf(pessoaDTO.getUf());
+            
+            try {
+                // Salva a pessoa atualizada no banco
+                updPessoa = pessoaRepository.save(updPessoa);  // Salva no banco para garantir que a atualização aconteça
+
+                // Cria o DTO com as propriedades da pessoa atualizada
+                PessoaDTO updPessoaDTO = new PessoaDTO();
+                BeanUtils.copyProperties(updPessoa, updPessoaDTO);  // Copia as propriedades da pessoa para o DTO
+
+                return updPessoaDTO;
+            } catch (Exception e) {
+                throw new ErroServidorException("Erro ao atualizar a pessoa: " + e.getMessage());
+            }
+        } else {
+            throw new IdNotFoundException("Pessoa com ID " + id + " não encontrada para a atualização!");
         }
     }
+
     /**
      * Exclui uma pessoa do banco de dados.
      * Se a pessoa não for encontrada, lança uma exceção.
@@ -161,7 +199,7 @@ public class PessoaService {
         		throw new ErroServidorException(e.getMessage());
         	}   
         } else {
-        	throw new PessoaNotFoundException("Pessoa com ID " + id + " não encontrada para exclusão");
+        	throw new IdNotFoundException("Pessoa com ID " + id + " não encontrada para exclusão");
         }
     }
 }
