@@ -1,13 +1,16 @@
 package br.com.taina.exception;
 
-public class IdNotFoundException extends RuntimeException{
+/**
+ * Exceção personalizada lançada quando um ID não é encontrado no sistema.
+ */
+public class IdNotFoundException extends RuntimeException {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public IdNotFoundException(String message) {
-		super(message);
-	}
-	
-	
-
+    /**
+     * @param message A mensagem de erro que descreve o motivo do ID não ter sido encontrado.
+     */
+    public IdNotFoundException(String message) {
+        super(message);
+    }
 }

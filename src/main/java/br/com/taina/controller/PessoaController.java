@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 import br.com.taina.dto.PessoaDTO;
 import br.com.taina.dto.PessoaMalaDiretaDTO;
-import br.com.taina.model.Pessoa;
 import br.com.taina.service.PessoaService;
 import io.swagger.v3.oas.annotations.Operation;
 
@@ -17,7 +16,7 @@ import io.swagger.v3.oas.annotations.Operation;
  * Fornece endpoints para criação, consulta, atualização, listagem e remoção de pessoas.
  * 
  * Os status de erro HTTP são tratados na classe {@link br.com.taina.validation.pessoa.PessoaHandler},
- * que caso sejam encontrados dados inadequados, utiliza as validações definidas na classe 
+ * que, caso sejam encontrados dados inadequados, utiliza as validações definidas na classe 
  * {@link br.com.taina.validation.PessoaValidation}, lançando exceções personalizadas do 
  * pacote {@link br.com.taina.validation.exception.pessoa}.
  */
@@ -32,7 +31,7 @@ public class PessoaController {
     /**
      * Cadastra uma nova pessoa.
      *
-     * @param pessoa Objeto contendo as informações da pessoa a ser cadastrada.
+     * @param pessoaDTO Objeto contendo as informações da pessoa a ser cadastrada.
      * @return ResponseEntity contendo a pessoa cadastrada e o status 201 (Created).
      * 
      * Em caso de erros HTTP, pode ser devido a falhas no servidor ou validações definidas 
@@ -48,17 +47,20 @@ public class PessoaController {
     /**
      * Lista todas as pessoas cadastradas.
      *
-     * @return ResponseEntity contendo a lista de pessoas cadastradas
+     * @return ResponseEntity contendo a lista de pessoas cadastradas.
      */
     @GetMapping
     @Operation(summary = "Lista todas as pessoas cadastradas")
-    public ResponseEntity<List<Pessoa>> findAll() {
-        List<Pessoa> pessoas = pessoaService.findAll();
-        return ResponseEntity.ok(pessoas);
+    public ResponseEntity<List<PessoaDTO>> findAll() {
+        // Chama o serviço que retorna uma lista de PessoaDTO
+        List<PessoaDTO> pessoasDTO = pessoaService.findAll();
+        
+        // Retorna a lista de DTOs dentro de um ResponseEntity
+        return ResponseEntity.ok(pessoasDTO);
     }
 
     /**
-     * Consulta uma pessoa por ID.
+     * Consulta uma pessoa pelo ID.
      *
      * @param id Identificador da pessoa a ser consultada.
      * @return ResponseEntity contendo a pessoa encontrada ou HTTP status 404 se não for encontrada.
@@ -68,7 +70,6 @@ public class PessoaController {
     public ResponseEntity<PessoaDTO> findById(@PathVariable Long id) {
         PessoaDTO pessoaDTO = pessoaService.findById(id);
 		return ResponseEntity.ok(pessoaDTO);
-
     }
 
     /**
@@ -88,7 +89,7 @@ public class PessoaController {
      * Atualiza as informações de uma pessoa existente.
      *
      * @param id Identificador da pessoa a ser atualizada.
-     * @param pessoa Objeto contendo as novas informações da pessoa.
+     * @param pessoaDTO Objeto contendo as novas informações da pessoa.
      * @return ResponseEntity contendo a pessoa atualizada ou status 404 se não for encontrada.
      * 
      * Em caso de erros HTTP, pode ser devido a falhas no servidor ou validações definidas na 
@@ -99,7 +100,6 @@ public class PessoaController {
     @Operation(summary = "Atualiza as informações de uma pessoa")
     public ResponseEntity<PessoaDTO> update(@PathVariable Long id, @RequestBody PessoaDTO pessoaDTO) {
         PessoaDTO pessoaAtualizada = pessoaService.update(id, pessoaDTO);
-
         return ResponseEntity.ok(pessoaAtualizada);
     }
 

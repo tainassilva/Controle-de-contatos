@@ -8,66 +8,81 @@ import br.com.taina.dto.ContatoDTO;
 import br.com.taina.enums.TipoContato;
 import br.com.taina.exception.CampoVazioException;
 import br.com.taina.exception.FormatoInvalidoException;
-import br.com.taina.exception.NotNullException;
+import br.com.taina.exception.IdNotNullException;
 
+/**
+ * Classe responsável pela validação de dados de contato, como telefone, celular, email e linkedln
+ * Realiza a verificação dos dados de entrada no DTO de contato e lança exceções personalizadas em caso de erro.
+ */
 @Component
 public class ContatoValidation {
 
+    
     private static final String regexCelularETelefoneFixo = "^\\d{10,11}$";
+
+    
     private static final String regexEmail = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+
+    
     private static final String regexLinkedIn = "^(https?:\\/\\/)?(www\\.)?linkedin\\.com\\/in\\/([a-zA-Z0-9-]+)$";
 
+    
     private boolean isTelefoneValido(String telefone) {
         return !Pattern.matches(regexCelularETelefoneFixo, telefone);
     }
 
+    
     private boolean isEmailValido(String email) {
         return !Pattern.matches(regexEmail, email);
     }
 
+  
     private boolean isLinkedlnValido(String linkedIn) {
         return !Pattern.matches(regexLinkedIn, linkedIn);
     }
 
+   
     private boolean isContatoNulo(String contato) {
         return contato == null;
     }
 
+    
     private boolean isContatoVazio(String contato) {
         return contato.trim().isEmpty();
     }
 
+   
     private boolean isTipoContatoNulo(String tipoContato) {
         return tipoContato == null;
     }
 
     /**
-     * Valida o contato sem modificar o retorno, apenas garantindo que `TipoContato` foi convertido.
+     * Método principal para validar um objeto ContatoDTO.
+     * Verifica se o tipo de contato, o contato em si e o formato do contato estão válidos.
+     * @param contatoDTO Objeto contendo os dados do contato a ser validado.
      */
     public void validarContato(ContatoDTO contatoDTO) {
         if (isTipoContatoNulo(contatoDTO.getTipoContato())) {
-            throw new NotNullException("Erro! O tipo de contato não pode ser nulo. Insira um tipo de contato válido: "
-                    + "TELEFONE_FIXO, CELULAR, EMAIL, LINKEDIN.");
-        }
-
-        try {
-            // Converte para Enum dentro da validação, sem modificar o retorno
-            TipoContato.fromString(contatoDTO.getTipoContato());
-        } catch (IllegalArgumentException e) {
-            throw new FormatoInvalidoException("Erro! Tipo de contato inválido. Insira um dos seguintes tipos: "
+            throw new IdNotNullException("Erro! O tipo de contato não pode ser nulo. Insira um tipo de contato válido: "
                     + "TELEFONE_FIXO, CELULAR, EMAIL, LINKEDIN.");
         }
 
         if (isContatoNulo(contatoDTO.getContato())) {
-            throw new NotNullException("Erro! O contato não pode ser nulo. Insira um contato.");
+            throw new IdNotNullException("Erro! O contato não pode ser nulo. Insira um contato.");
         }
 
         if (isContatoVazio(contatoDTO.getContato())) {
             throw new CampoVazioException("Erro! O contato não pode ser vazio. Insira um contato.");
         }
 
-        // Como o `TipoContato` já foi validado, podemos fazer a verificação do formato do contato
-        switch (TipoContato.fromString(contatoDTO.getTipoContato())) {
+        try {
+            TipoContato.valueOf(contatoDTO.getTipoContato().trim().toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new FormatoInvalidoException("Erro! Tipo de contato inválido. Insira um dos seguintes tipos: "
+                    + "TELEFONE_FIXO, CELULAR, EMAIL, LINKEDIN.");
+        }
+
+        switch (TipoContato.valueOf(contatoDTO.getTipoContato().trim().toUpperCase())) {
             case CELULAR:
             case TELEFONE_FIXO:
                 if (isTelefoneValido(contatoDTO.getContato())) {

@@ -14,7 +14,7 @@ import io.swagger.v3.oas.annotations.Operation;
  * Fornece endpoints para criação, consulta, atualização, listagem e remoção de contatos.
  * 
  * Os status de erro HTTP são tratados na classe {@link br.com.taina.validation.contato.ContatoHandler},
- * que caso sejam encontrados dados inadequados, utiliza as validações definidas na classe 
+ * que, caso sejam encontrados dados inadequados, utiliza as validações definidas na classe 
  * {@link br.com.taina.validation.ContatoValidation}, lançando exceções personalizadas do 
  * pacote {@link br.com.taina.validation.exception.contato}.
  */
@@ -28,11 +28,9 @@ public class ContatoController {
     /**
      * Salva um novo contato para uma pessoa.
      *
-     * @param contato Objeto contendo as informações do contato a ser salvo.
+     * @param contatoDTO Objeto contendo as informações do contato a ser salvo.
      * @return ResponseEntity contendo o contato salvo e o status 201 (Created).
      * 
-     * Em caso de erros HTTP, pode ser devido a falhas no servidor ou validações definidas 
-     * na classe {@link br.com.taina.validation.ContatoValidation}.
      */
     @PostMapping
     @Operation(summary = "Salva um novo contato para uma pessoa")
@@ -57,12 +55,8 @@ public class ContatoController {
     /**
      * Lista todos os contatos de uma pessoa pelo seu ID.
      *
-     * @param id Identificador da pessoa cujos contatos serão listados.
+     * @param idPessoa Identificador da pessoa cujos contatos serão listados.
      * @return ResponseEntity contendo a lista de contatos encontrados.
-     * 
-     * Em caso de erros HTTP, pode ser devido a falhas no servidor ou validações definidas na 
-     * classe {@link br.com.taina.validation.ContatoValidation}, que são as mesmas aplicadas 
-     * ao salvar um contato.
      */
     @GetMapping("pessoa/{idPessoa}")
     @Operation(summary = "Lista todos os contatos de uma pessoa")
@@ -75,8 +69,8 @@ public class ContatoController {
      * Atualiza um contato existente pelo ID.
      *
      * @param id Identificador do contato a ser atualizado.
-     * @param contato Objeto contendo as novas informações do contato.
-     * @return ResponseEntity contendo o contato atualizado ou HTTP status 404 caso não for encontrado
+     * @param contatoDTO Objeto contendo as novas informações do contato.
+     * @return ResponseEntity contendo o contato atualizado ou HTTP status 404 caso não seja encontrado.
      */
     @PutMapping("/{id}")
     @Operation(summary = "Atualiza um contato existente")
@@ -89,9 +83,7 @@ public class ContatoController {
      * Deleta um contato pelo ID.
      *
      * @param id Identificador do contato a ser removido.
-     * @return ResponseEntity com HTTP status 204 (No Content) se a remoção for bem-sucedida
-     * @return ResponseEntity contendo o contato atualizado ou HTTP status 404 caso não for encontrado
-
+     * @return ResponseEntity com HTTP status 204 (No Content) se a remoção for bem-sucedida.
      */
     @DeleteMapping("/{id}")
     @Operation(summary = "Deleta um contato pelo ID")

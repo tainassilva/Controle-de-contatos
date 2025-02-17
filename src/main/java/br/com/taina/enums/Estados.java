@@ -1,8 +1,11 @@
 package br.com.taina.enums;
 
 /**
- * Enum que representa os estados do Brasil, evitando a inserção de estados inválidos.
+ * Enum para representar os estados do Brasil, evitando a inserção de estados inválidos.
  */
 public enum Estados {
-    AC, AL, AP, AM, BA, CE, DF, ES, GO, MA, MT, MS, MG, PA, PB, PR, PE, PI, RJ, RN, RS, RO, RR, SC, SP, SE, TO;
+    RR, RS, DF, SC, SE, MA, MG, SP, AC, MS, MT, GO, AL, AM, ES, AP, PA, PB, PE, RJ, PI, TO, RN, RO, BA, PR, CE;
+
+	
 }
+

@@ -8,46 +8,60 @@ import br.com.taina.dto.PessoaDTO;
 import br.com.taina.enums.Estados;
 import br.com.taina.exception.CampoVazioException;
 import br.com.taina.exception.FormatoInvalidoException;
-import br.com.taina.exception.NotNullException;
+import br.com.taina.exception.IdNotNullException;
 
+/**
+ * Classe responsável pela validação dos campos do objeto {@link PessoaDTO}.
+ * Contém métodos que validam os campos, garantindo que atendam aos critérios esperados.
+ * 
+ * As validações incluem:
+ * - Nome: Não pode ser nulo, vazio ou conter caracteres inválidos.
+ * - CEP: Deve seguir o formato XXXXX-XXX ou XXXXXXXX.
+ * - Cidade: Deve conter apenas letras.
+ * - UF: Deve ser um estado válido conforme o enum {@link Estados}.
+ */
 @Component
 public class PessoaValidation {
 
+    // Expressões regulares para validação de nome e CEP
     private static final String regexLetrasEspacos = "^[A-Za-záàãâéèêíóôúçÁÀÂÉÊÍÓÔÚÇ\\s]+$";
     private static final String regexCep = "^[0-9]{5}-?[0-9]{3}$";
 
-    // Método de validação para nome
+   
     private boolean isNomeInvalido(String nome) {
         return !Pattern.matches(regexLetrasEspacos, nome);
     }
+
+  
     private boolean isNomeVazio(String nome) {
     	return nome.trim().isEmpty(); 
     }
+
+   
     private boolean isNomeNulo(String nome) {
     	return nome == null;
     }
+    
     
     private boolean isCepInvalido(String cep) {
         return cep != null && !Pattern.matches(regexCep, cep);  // Só valida se o CEP não for nulo
     }
     
-    private boolean isCidadeValida(String cidade) {
-    	return cidade != null && !Pattern.matches(regexLetrasEspacos, cidade);
-    }
     
-    private boolean isUfValido(String uf) {
-        try {
-            return Estados.valueOf(uf.toUpperCase()) != null; // Valida no Enum
-        } catch (IllegalArgumentException e) {
-            return false; // Se não existir, retorna falso
-        }
+    private boolean isCidadeInValida(String cidade) {
+    	return cidade != null && !Pattern.matches(regexLetrasEspacos, cidade); // Só valida se a cidade não for nula
     }
-    
+
+    /**
+     * Valida os campos do objeto {@link PessoaDTO}.
+     * Lança exceções personalizadas quando os dados não atendem aos critérios de validação.
+     *
+     * @param pessoaDTO O objeto contendo os dados da pessoa a ser validada.
+     */
     public void validarPessoaDTO(PessoaDTO pessoaDTO) {
-        // Verifica os erros e lança exceções específicas
 
     	if(isNomeNulo(pessoaDTO.getNome())){
-    		throw new  NotNullException("Campo nulo não permitido! Insira um nome.");
+    		throw new IdNotNullException("Campo nulo não permitido! Insira um nome.");
     	}
     	
     	if(isNomeVazio(pessoaDTO.getNome())){
@@ -57,16 +71,20 @@ public class PessoaValidation {
             throw new FormatoInvalidoException("Nome inválido! Deve conter apenas letras.");
         }
 
-        if (isCidadeValida(pessoaDTO.getCidade())) {
+        if (isCidadeInValida(pessoaDTO.getCidade())) {
             throw new FormatoInvalidoException("Cidade inválida! Deve conter apenas letras.");
         }
 
         if (isCepInvalido(pessoaDTO.getCep())) {
             throw new FormatoInvalidoException("CEP inválido! O formato correto é XXXXXXXX ou XXXXX-XXX.");
+
+        }
+     // Valida o estado (UF) usando try-catch
+        try {
+            Estados.valueOf(pessoaDTO.getUf().trim().toUpperCase()); 
+        } catch (IllegalArgumentException e) { // Captura IllegalArgumentException, se o enum for inválido 
+            throw new FormatoInvalidoException("UF inválido! Insira um estado válido. Exemplo: SP.");
         }
 
-        if (pessoaDTO.getUf() != null && !isUfValido(pessoaDTO.getUf().name())) {
-            throw new FormatoInvalidoException("UF inválido! Digite um formato válido, exemplo: SP.");
-        }
     }
 }

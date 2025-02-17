@@ -1,7 +1,12 @@
 package br.com.taina.dto;
 
-import br.com.taina.enums.Estados;
 import io.swagger.v3.oas.annotations.media.Schema;
+
+
+/**
+ * Classe DTO responsável por representar os dados de uma pessoa, sem incluir a lista de contatos.
+ * Neste momento, não é necessário expor a lista de contatos da pessoa.
+ */
 
 public class PessoaDTO {
 	
@@ -21,11 +26,12 @@ public class PessoaDTO {
 	private String cidade;
 	
 	@Schema(description = "Estado da pessoa (UF)", example = "SP")
-	private Estados uf;
+	private String uf;
 	
 	public PessoaDTO() {}
+	
 
-	public PessoaDTO(Long id, String nome, String endereco, String cep, String cidade, Estados uf) {
+	public PessoaDTO(Long id, String nome, String endereco, String cep, String cidade, String uf) {
 		this.id = id;
 		this.nome = nome;
 		this.endereco = endereco;
@@ -33,6 +39,7 @@ public class PessoaDTO {
 		this.cidade = cidade;
 		this.uf = uf;
 	}
+	
 
 	public Long getId() {
 		return id;
@@ -74,11 +81,11 @@ public class PessoaDTO {
 		this.cidade = cidade;
 	}
 
-	public Estados getUf() {
+	public String getUf() {
 		return uf;
 	}
 
-	public void setUf(Estados uf) {
+	public void setUf(String uf) {
 		this.uf = uf;
 	}
 

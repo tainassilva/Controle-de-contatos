@@ -17,33 +17,20 @@ import jakarta.persistence.*;
 @Schema(hidden = true)
 public class Contato {
 
-    /**
-     * Identificador único do contato.
-     * Esse campo é gerado automaticamente pelo banco de dados.
-     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) 
     private Long id;
 
-    /**
-     * Tipo de contato, que pode ser definido conforme os Enums no {@link TipoContato}.
-     * Esse campo é obrigatório.
-     */
+    
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TipoContato tipoContato; 
 
-    /**
-     * Valor do contato: número de telefone fixo ou celular, endereço de e-mail ou linkedIn.
-     * Este campo é obrigatório.
-     */
+    
     @Column(nullable = false)
     private String contato;
 
-    /**
-     * Pessoa associada a este contato. Relacionamento muitos-para-um com a entidade {@link Pessoa}.
-     * Vários coontatos pertence a uma pessoa específica.
-     */
+    
     @ManyToOne
     @JoinColumn(name = "id_pessoa")
     private Pessoa pessoa;
@@ -57,9 +44,6 @@ public class Contato {
 		this.pessoa = pessoa;
 	}
 
-
-	// Getters e Setters
-
     public TipoContato getTipoContato() {
         return tipoContato;
     }
@@ -67,8 +51,6 @@ public class Contato {
     public void setTipoContato(TipoContato tipoContato) {
         this.tipoContato = tipoContato;
     }
-
-  
 
     public Long getId() {
 		return id;
@@ -93,12 +75,7 @@ public class Contato {
     public void setPessoa(Pessoa pessoa) {
         this.pessoa = pessoa;
     }
-
-    /**
-     * Representação em formato de string do objeto Contato.
-     * 
-     * @return String contendo informações sobre o contato, como ID, tipo e valor do contato, e a pessoa associada.
-     */
+    
     @Override
     public String toString() {
         return "Contato [id=" + id + ", tipoContato=" + tipoContato + ", contato=" + contato + ", pessoa=" + pessoa + "]";

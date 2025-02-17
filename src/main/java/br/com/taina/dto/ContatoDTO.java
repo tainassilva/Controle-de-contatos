@@ -7,17 +7,24 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
- * Classe DTO responsável por representar os dados de contato de uma pessoa,
- * sem incluir as informações relacionadas à pessoa.
+ * Classe DTO responsável por representar os dados de contato de uma pessoa.
+ * 
+ * Este DTO inclui apenas as informações relacionadas ao contato.
+ * A classe não contém dados relacionados à pessoa, exceto o identificador (ID) da pessoa, utilizado
+ * para realizar consultas ou associar o contato a entidade de pessoa no sistema.
  */
+
 public class ContatoDTO {
 	
 	@Schema(hidden = true)
+	// O campo 'id' será incluído apenas se não for nulo. Como o valor de 'id' nunca será nulo,
+	// essa anotação previne erros de serialização, garantindo que o campo seja corretamente
+	// tratado durante o processo de conversão para JSON.
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private Long id;
 	
 	@Schema(description = "Tipos de contato da pessoa.",
-			example = "CELULAR | TELEFONE | EMAIL | LINKEDLN")
+			example = "CELULAR")
 	private String tipoContato;
 	
 	@Schema(description = "Contato da pessoa", 
@@ -30,8 +37,16 @@ public class ContatoDTO {
     
     public ContatoDTO() {};
  
-    
+
 	public ContatoDTO(String tipoContato, String contato, Long idPessoa) {
+		this.tipoContato = tipoContato;
+		this.contato = contato;
+		this.idPessoa = idPessoa;
+	}
+	
+
+	public ContatoDTO(Long id, String tipoContato, String contato, Long idPessoa) {
+		this.id = id;
 		this.tipoContato = tipoContato;
 		this.contato = contato;
 		this.idPessoa = idPessoa;
@@ -79,9 +94,4 @@ public class ContatoDTO {
 		return "ContatoDTO [idContato=" + id + ", tipoContato=" + tipoContato + ", contato=" + contato
 				+ ", idPessoa=" + idPessoa + "]";
 	}
-	
-	
-
-
-
 }

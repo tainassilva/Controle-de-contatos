@@ -1,4 +1,4 @@
-package br.com.taina.validation;
+package br.com.taina.error;
 
 /**
  * Classe que representa uma resposta de erro padronizada.

@@ -34,7 +34,8 @@ public class Pessoa {
     @Enumerated(EnumType.STRING)
     private Estados uf;
 
-    @JsonIgnore
+    @JsonIgnore // Ignora o campo durante a serialização para evitar erros de processamento. 
+    // O campo é excluído porque o PessoaDTO não contém uma lista de contatos, apenas os dados da pessoa.
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "pessoa", targetEntity = Contato.class)
     private List<Contato> contatos;
 
