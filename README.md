@@ -286,7 +286,7 @@ HTTP/1.1 204 NO CONTENT
 
 **REQUEST**
 ```http
-localhost:8080/api/contatos/1'
+localhost:8080/api/contatos/1
 ```
 
 **RESPONSE**
@@ -329,7 +329,7 @@ localhost:8080/api/contatos/pessoa/1
 **REQUEST**
 
 ```http
-localhost:8080/api/contatos/1'
+localhost:8080/api/contatos/1
 ```
 
 ```json
@@ -354,7 +354,7 @@ localhost:8080/api/contatos/1'
 
 **REQUEST**
 ```http
-localhost:8080/api/contatos/1'
+localhost:8080/api/contatos/1
 ```
 
 **RESPONSE**
