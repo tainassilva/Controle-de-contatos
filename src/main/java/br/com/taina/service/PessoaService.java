@@ -9,7 +9,7 @@ import br.com.taina.enums.Estados;
 import br.com.taina.exception.ErroServidorException;
 import br.com.taina.exception.IdNotFoundException;
 import br.com.taina.exception.NadaParaListarException;
-import br.com.taina.exception.IdNotNullException;
+import br.com.taina.exception.CampoNotNullException;
 import br.com.taina.model.Pessoa;
 import br.com.taina.repository.PessoaRepository;
 import br.com.taina.validation.PessoaValidation;
@@ -38,24 +38,33 @@ public class PessoaService {
      * Depois, persiste a pessoa no banco e retorna o DTO com os dados salvos
      */
     public PessoaDTO save(PessoaDTO pessoaDTO) {
-        // Valida os dados da pessoa
-        pessoaValidation.validarPessoaDTO(pessoaDTO);
+            // Valida os dados da pessoa
+            pessoaValidation.validarPessoaDTO(pessoaDTO);
 
-        // Criando a entidade Pessoa a partir do DTO
-        Pessoa pessoa = new Pessoa();
-        pessoa.setNome(pessoaDTO.getNome());
-        pessoa.setEndereco(pessoaDTO.getEndereco());
-        pessoa.setCep(pessoaDTO.getCep());
-        pessoa.setCidade(pessoaDTO.getCidade());
+            Pessoa pessoa = new Pessoa();
+            pessoa.setNome(pessoaDTO.getNome());
+            pessoa.setEndereco(pessoaDTO.getEndereco());
+            pessoa.setCep(pessoaDTO.getCep());
+            pessoa.setCidade(pessoaDTO.getCidade());
 
-        pessoa.setUf(Estados.valueOf(pessoaDTO.getUf().trim().toUpperCase())); // Convertendo para Enum
+            if (pessoaDTO.getUf() != null) {
+                pessoa.setUf(Estados.valueOf(pessoaDTO.getUf().toUpperCase())); // Convertendo para Enum caso não seja nulo
+            } else {
+                pessoa.setUf(null); // Permitir UF nula
+            }
 
-        pessoa = pessoaRepository.save(pessoa);
+            try {
+            pessoa = pessoaRepository.save(pessoa);
 
-        // Retorna o DTO com os dados salvos
-        return new PessoaDTO(pessoa.getId(), pessoa.getNome(), pessoa.getEndereco(),
-                              pessoa.getCep(), pessoa.getCidade(), pessoa.getUf().name()); // Convertendo o Enum de volta para String para não dar erro
+            return new PessoaDTO(pessoa.getId(), pessoa.getNome(), pessoa.getEndereco(),
+                    pessoa.getCep(), pessoa.getCidade(), 
+                    pessoa.getUf() != null ? pessoa.getUf().name() : null); // retorna o uf caso não seja nulo, se não , retorna nulo
+
+        } catch (ErroServidorException e) {
+            throw new ErroServidorException("Erro ao salvar a pessoa: " + e.getMessage());
+        }
     }
+
 
 
 
@@ -65,7 +74,7 @@ public class PessoaService {
      * @return Lista de {@link PessoaDTO} com as informações das pessoas cadastradas.
      */
     public List<PessoaDTO> findAll() {
-        try {
+    	try {
             List<Pessoa> pessoas = pessoaRepository.findAll();
 
             if (pessoas.isEmpty()) {
@@ -79,7 +88,8 @@ public class PessoaService {
                             pessoa.getEndereco(),
                             pessoa.getCep(),
                             pessoa.getCidade(),
-                            pessoa.getUf().name() // Converte o Enum 'uf' para String
+                            pessoa.getUf() != null ? pessoa.getUf().name() : null // Converte o Enum 'uf' para String
+                            													 // Se o  uf for nulo retorna null, se não for, converte 
                     ))
                     .collect(Collectors.toList());
 
@@ -97,7 +107,7 @@ public class PessoaService {
      */
     public PessoaDTO findById(Long id) {
     	 if (id == null) {
-             throw new IdNotNullException("Erro! Campo ID não pode ser nulo.");
+             throw new CampoNotNullException("Erro! Campo ID não pode ser nulo.");
          }
         try {
             // Verifica se a pessoa existe e mapeia para o DTO
@@ -108,7 +118,7 @@ public class PessoaService {
                         pessoa.getEndereco(),
                         pessoa.getCep(),
                         pessoa.getCidade(),
-                        pessoa.getUf().name() 
+                        pessoa.getUf() != null ? pessoa.getUf().name() : null 
                 ))
                 .orElseThrow(() -> new IdNotFoundException("Pessoa com ID " + id + " não encontrada"));
         } catch (ErroServidorException e) {
@@ -126,7 +136,7 @@ public class PessoaService {
      */
     public PessoaMalaDiretaDTO findPessoaById(Long id) {
         if (id == null) {
-            throw new IdNotNullException("Erro! Campo ID não pode ser nulo.");
+            throw new CampoNotNullException("Erro! Campo ID não pode ser nulo.");
         }
 
         try {
@@ -148,36 +158,40 @@ public class PessoaService {
      * @return O DTO {@link PessoaDTO} com os dados atualizados.
      */
     public PessoaDTO update(Long id, PessoaDTO pessoaDTO) {
-        if (id == null) {
-            throw new IdNotNullException("Erro! Campo ID não pode ser nulo.");
-        }
-        
-        try {
-            Pessoa pessoa = pessoaRepository.findById(id)
-                    .orElseThrow(() -> new IdNotFoundException("Pessoa com ID " + id + " não encontrada para a atualização!"));
+            if (id == null) {
+                throw new CampoNotNullException("Erro! Campo ID não pode ser nulo.");
+            }
 
-            // Valida os dados antes de atualizar
+            Pessoa pessoa = pessoaRepository.findById(id)
+                    .orElseThrow(() -> new IdNotFoundException("Pessoa com ID " + id + " não encontrada para atualização!"));
+
+
             pessoaValidation.validarPessoaDTO(pessoaDTO);
 
-            // Atualiza os dados da pessoa com os valores do DTO
             pessoa.setNome(pessoaDTO.getNome());
             pessoa.setEndereco(pessoaDTO.getEndereco());
             pessoa.setCep(pessoaDTO.getCep());
             pessoa.setCidade(pessoaDTO.getCidade());
-            
-            // Convertendo o valor de uf (String) para o Enum antes de salvar
-            pessoa.setUf(Estados.valueOf(pessoaDTO.getUf().trim().toUpperCase())); 
 
+            // Permitir UF nula
+            if (pessoaDTO.getUf() != null && !pessoaDTO.getUf().trim().isEmpty()) {
+                pessoa.setUf(Estados.valueOf(pessoaDTO.getUf().trim().toUpperCase()));
+            } else {
+                pessoa.setUf(null);
+            }
+
+            try {
             pessoa = pessoaRepository.save(pessoa);
 
-            // Cria e retorna o DTO com os dados atualizados
             return new PessoaDTO(pessoa.getId(), pessoa.getNome(), pessoa.getEndereco(),
-                                 pessoa.getCep(), pessoa.getCidade(), pessoa.getUf().name()); // Convertendo o enum para String
+                                 pessoa.getCep(), pessoa.getCidade(),
+                                 pessoa.getUf() != null ? pessoa.getUf().name() : null);
 
         } catch (ErroServidorException e) {
             throw new ErroServidorException(e.getMessage());
         }
     }
+
 
 
     /**
@@ -188,13 +202,13 @@ public class PessoaService {
      */
     public void delete(Long id) {
         if (id == null) {
-            throw new IdNotNullException("Erro! Campo ID não pode ser nulo.");
+            throw new CampoNotNullException("Erro! Campo ID não pode ser nulo.");
         }
 
-        try {
+       
             Pessoa pessoa = pessoaRepository.findById(id)
                     .orElseThrow(() -> new IdNotFoundException("Pessoa com ID " + id + " não encontrada para exclusão"));
-
+            try {
             pessoaRepository.delete(pessoa);
         } catch (Exception e) {
             throw new ErroServidorException("Erro ao excluir a pessoa: " + e.getMessage());

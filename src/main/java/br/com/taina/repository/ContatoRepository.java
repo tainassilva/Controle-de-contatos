@@ -17,6 +17,6 @@ public interface ContatoRepository extends JpaRepository<Contato, Long> {
      * @return Uma lista de contatos associados à pessoa.
      */
 	
-	  List<Contato> findByPessoaId(Long id); 
+	  List<Contato> findContatosPessoaById(Long id); 
 }
 

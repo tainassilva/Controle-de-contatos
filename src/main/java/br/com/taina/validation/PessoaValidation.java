@@ -8,7 +8,7 @@ import br.com.taina.dto.PessoaDTO;
 import br.com.taina.enums.Estados;
 import br.com.taina.exception.CampoVazioException;
 import br.com.taina.exception.FormatoInvalidoException;
-import br.com.taina.exception.IdNotNullException;
+import br.com.taina.exception.CampoNotNullException;
 
 /**
  * Classe responsável pela validação dos campos do objeto {@link PessoaDTO}.
@@ -49,7 +49,7 @@ public class PessoaValidation {
     
     
     private boolean isCidadeInValida(String cidade) {
-    	return cidade != null && !Pattern.matches(regexLetrasEspacos, cidade); // Só valida se a cidade não for nula
+    	return cidade != null && !Pattern.matches(regexLetrasEspacos, cidade); 
     }
 
     /**
@@ -61,7 +61,7 @@ public class PessoaValidation {
     public void validarPessoaDTO(PessoaDTO pessoaDTO) {
 
     	if(isNomeNulo(pessoaDTO.getNome())){
-    		throw new IdNotNullException("Campo nulo não permitido! Insira um nome.");
+    		throw new CampoNotNullException("Campo nulo não permitido! Insira um nome.");
     	}
     	
     	if(isNomeVazio(pessoaDTO.getNome())){
@@ -76,15 +76,17 @@ public class PessoaValidation {
         }
 
         if (isCepInvalido(pessoaDTO.getCep())) {
-            throw new FormatoInvalidoException("CEP inválido! O formato correto é XXXXXXXX ou XXXXX-XXX.");
-
+            throw new FormatoInvalidoException("CEP inválido! O formato correto é XXXXXXXX ou XXXXX-XXX (Apenas números).");
         }
-     // Valida o estado (UF) usando try-catch
-        try {
-            Estados.valueOf(pessoaDTO.getUf().trim().toUpperCase()); 
-        } catch (IllegalArgumentException e) { // Captura IllegalArgumentException, se o enum for inválido 
-            throw new FormatoInvalidoException("UF inválido! Insira um estado válido. Exemplo: SP.");
+        
+        if (pessoaDTO.getUf() != null && !pessoaDTO.getUf().trim().isEmpty()) {
+            try {
+                Estados.valueOf(pessoaDTO.getUf().trim().toUpperCase()); // Tenta converter para enum 
+            } catch (IllegalArgumentException e) {
+                throw new FormatoInvalidoException("UF inválido! Insira um estado válido. Exemplo: SP.");
+            }
+        } else {
+            pessoaDTO.setUf(null); // Garante que a UF aceite o valor null
         }
-
     }
 }

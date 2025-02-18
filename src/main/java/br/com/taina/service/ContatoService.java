@@ -10,7 +10,8 @@ import br.com.taina.dto.ContatoDTO;
 import br.com.taina.enums.TipoContato;
 import br.com.taina.exception.ErroServidorException;
 import br.com.taina.exception.IdNotFoundException;
-import br.com.taina.exception.IdNotNullException;
+import br.com.taina.exception.NadaParaListarException;
+import br.com.taina.exception.CampoNotNullException;
 import br.com.taina.model.Contato;
 import br.com.taina.model.Pessoa;
 import br.com.taina.repository.ContatoRepository;
@@ -44,7 +45,12 @@ public class ContatoService {
      * @param contatoDTO O contato a ser salvo.
      * @return O contato salvo no banco de dados.
      */
-    public ContatoDTO save(ContatoDTO contatoDTO) {    
+    public ContatoDTO save(ContatoDTO contatoDTO) {  
+    	
+    	if (contatoDTO.getIdPessoa() == null) {
+            throw new CampoNotNullException("Erro! O idPessoa não pode ser nulo. Insira um id válido!");
+        }
+    	
         Pessoa pessoa = pessoaRepository.findById(contatoDTO.getIdPessoa())
                 .orElseThrow(() -> new IdNotFoundException("Pessoa com ID " + contatoDTO.getIdPessoa() + " não encontrada"));
 
@@ -56,15 +62,16 @@ public class ContatoService {
         novoContato.setPessoa(pessoa);
         pessoa.getContatos().add(novoContato);
 
+
+        
         try {
             novoContato = contatoRepository.save(novoContato);
             pessoaRepository.save(pessoa);
+            return new ContatoDTO(novoContato.getId(), novoContato.getTipoContato().name(), novoContato.getContato(), novoContato.getPessoa().getId());
         } catch (Exception e) {
             throw new ErroServidorException(e.getMessage());
         }
-        
-        return new ContatoDTO(novoContato.getId(), novoContato.getTipoContato().name(), novoContato.getContato(), novoContato.getPessoa().getId());
-    }
+            }
 
     /**
      * Busca um contato pelo ID e retorna um DTO com os dados do contato.
@@ -74,7 +81,7 @@ public class ContatoService {
      */
     public ContatoDTO findById(Long id) {
         if (id == null) {
-            throw new IdNotNullException("Erro! Campo ID não pode ser nulo.");
+            throw new CampoNotNullException("Erro! Campo ID não pode ser nulo.");
         }
 
         try {
@@ -96,20 +103,30 @@ public class ContatoService {
      */
     public List<ContatoDTO> findAllByPessoaId(Long idPessoa) {
         if (idPessoa == null) {
-            throw new IdNotNullException("Erro! Campo ID não pode ser nulo.");
+            throw new CampoNotNullException("Erro! Campo ID não pode ser nulo.");
         }
+
+        pessoaRepository.findById(idPessoa)
+                .orElseThrow(() -> new IdNotFoundException("Pessoa com ID " + idPessoa + " não encontrada"));
 
         try {
-            pessoaRepository.findById(idPessoa)
-                    .orElseThrow(() -> new IdNotFoundException("Pessoa com ID " + idPessoa + " não encontrada"));
-
-            return contatoRepository.findByPessoaId(idPessoa).stream()
+            List<ContatoDTO> contatos = contatoRepository.findContatosPessoaById(idPessoa).stream()
                     .map(contato -> new ContatoDTO(contato.getId(), contato.getTipoContato().name(), contato.getContato(), contato.getPessoa().getId()))
                     .collect(Collectors.toList());
+
+            if (contatos.isEmpty()) {
+                throw new NadaParaListarException("Nenhum contato encontrado para a pessoa com ID " + idPessoa);
+            }
+
+            return contatos;
+        } catch (NadaParaListarException e) {
+            throw new NadaParaListarException(e.getMessage()); 
         } catch (Exception e) {
-            throw new ErroServidorException("Erro ao buscar contatos no banco de dados: " + e.getMessage());
+            throw new ErroServidorException(e.getMessage()); 
         }
     }
+
+
 
 
     /**
@@ -121,7 +138,7 @@ public class ContatoService {
      */
     public ContatoDTO update(Long id, ContatoDTO contatoDTO) {
         if (id == null) {
-            throw new IdNotNullException("Erro! Campo ID não pode ser nulo.");
+            throw new CampoNotNullException("Erro! Campo ID não pode ser nulo.");
         }
         
         Contato contatoAtualizado = contatoRepository.findById(id)
@@ -134,11 +151,12 @@ public class ContatoService {
 
         try {
             contatoAtualizado = contatoRepository.save(contatoAtualizado);
+            return new ContatoDTO(contatoAtualizado.getId(), contatoAtualizado.getTipoContato().name(), contatoAtualizado.getContato(), contatoAtualizado.getPessoa().getId());
+
         } catch (Exception e) {
             throw new ErroServidorException(e.getMessage());
         }
         
-        return new ContatoDTO(contatoAtualizado.getId(), contatoAtualizado.getTipoContato().name(), contatoAtualizado.getContato(), contatoAtualizado.getPessoa().getId());
     }
 
     /**
@@ -148,7 +166,7 @@ public class ContatoService {
      */
     public void delete(Long id) {
         if (id == null) {
-            throw new IdNotNullException("Erro! Campo ID não pode ser nulo.");
+            throw new CampoNotNullException("Erro! Campo ID não pode ser nulo.");
         }
         
         contatoRepository.findById(id)

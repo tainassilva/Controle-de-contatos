@@ -8,7 +8,7 @@ import br.com.taina.dto.ContatoDTO;
 import br.com.taina.enums.TipoContato;
 import br.com.taina.exception.CampoVazioException;
 import br.com.taina.exception.FormatoInvalidoException;
-import br.com.taina.exception.IdNotNullException;
+import br.com.taina.exception.CampoNotNullException;
 
 /**
  * Classe responsável pela validação de dados de contato, como telefone, celular, email e linkedln
@@ -63,12 +63,12 @@ public class ContatoValidation {
      */
     public void validarContato(ContatoDTO contatoDTO) {
         if (isTipoContatoNulo(contatoDTO.getTipoContato())) {
-            throw new IdNotNullException("Erro! O tipo de contato não pode ser nulo. Insira um tipo de contato válido: "
+            throw new CampoNotNullException("Erro! O tipo de contato não pode ser nulo. Insira um tipo de contato válido: "
                     + "TELEFONE_FIXO, CELULAR, EMAIL, LINKEDIN.");
         }
 
         if (isContatoNulo(contatoDTO.getContato())) {
-            throw new IdNotNullException("Erro! O contato não pode ser nulo. Insira um contato.");
+            throw new CampoNotNullException("Erro! O contato não pode ser nulo. Insira um contato.");
         }
 
         if (isContatoVazio(contatoDTO.getContato())) {

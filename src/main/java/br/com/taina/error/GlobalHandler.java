@@ -10,7 +10,7 @@ import br.com.taina.exception.FormatoInvalidoException;
 import br.com.taina.exception.IdNotFoundException;
 import br.com.taina.exception.NadaParaListarException;
 import br.com.taina.exception.NenhumaAlteracaoException;
-import br.com.taina.exception.IdNotNullException;
+import br.com.taina.exception.CampoNotNullException;
 
 /**
  * Classe responsável por capturar e tratar exceções globalmente na aplicação.
@@ -45,8 +45,8 @@ public class GlobalHandler {
 	    return ResponseEntity.status(400).body(error);
 	}
 
-	@ExceptionHandler(IdNotNullException.class)
-	public ResponseEntity<ErrorResponse> handleIdNotNull(IdNotNullException ex) {
+	@ExceptionHandler(CampoNotNullException.class)
+	public ResponseEntity<ErrorResponse> handleIdNotNull(CampoNotNullException ex) {
 	    ErrorResponse error = new ErrorResponse(400, ex.getMessage());
 	    return ResponseEntity.status(400).body(error);
 	}
