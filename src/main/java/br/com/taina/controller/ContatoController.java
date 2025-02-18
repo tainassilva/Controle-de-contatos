@@ -33,7 +33,7 @@ public class ContatoController {
      * 
      */
     @PostMapping
-    @Operation(summary = "Salva um novo contato para uma pessoa")
+    @Operation(summary = "Salva um novo contato para uma pessoa.")
     public ResponseEntity<ContatoDTO> save(@RequestBody ContatoDTO contatoDTO) {
         ContatoDTO salvarContato = contatoService.save(contatoDTO);
         return ResponseEntity.status(201).body(salvarContato);
@@ -46,7 +46,7 @@ public class ContatoController {
      * @return ResponseEntity contendo o contato encontrado ou HTTP status 404 se não for encontrado.
      */
     @GetMapping("/{id}")
-    @Operation(summary = "Consulta um contato pelo ID")
+    @Operation(summary = "Consulta um contato pelo ID.")
     public ResponseEntity<ContatoDTO> findById(@PathVariable Long id) {
         ContatoDTO contatoDTO = contatoService.findById(id);
         return ResponseEntity.ok(contatoDTO);
@@ -59,7 +59,7 @@ public class ContatoController {
      * @return ResponseEntity contendo a lista de contatos encontrados.
      */
     @GetMapping("pessoa/{idPessoa}")
-    @Operation(summary = "Lista todos os contatos de uma pessoa")
+    @Operation(summary = "Lista todos os contatos de uma pessoa por ID.")
     public ResponseEntity<List<ContatoDTO>> findAllContactsPessoas(@PathVariable Long idPessoa) {
         List<ContatoDTO> findContato = contatoService.findAllByPessoaId(idPessoa);
         return ResponseEntity.ok(findContato);
@@ -73,7 +73,7 @@ public class ContatoController {
      * @return ResponseEntity contendo o contato atualizado ou HTTP status 404 caso não seja encontrado.
      */
     @PutMapping("/{id}")
-    @Operation(summary = "Atualiza um contato existente")
+    @Operation(summary = "Atualiza um contato existente por ID.")
     public ResponseEntity<ContatoDTO> update(@PathVariable Long id, @RequestBody ContatoDTO contatoDTO) {
         ContatoDTO updContato = contatoService.update(id, contatoDTO);
         return ResponseEntity.ok(updContato);
@@ -86,7 +86,7 @@ public class ContatoController {
      * @return ResponseEntity com HTTP status 204 (No Content) se a remoção for bem-sucedida.
      */
     @DeleteMapping("/{id}")
-    @Operation(summary = "Deleta um contato pelo ID")
+    @Operation(summary = "Deleta um contato por ID.")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         contatoService.delete(id);
         return ResponseEntity.noContent().build();

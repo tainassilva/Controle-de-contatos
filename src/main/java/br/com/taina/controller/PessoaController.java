@@ -38,7 +38,7 @@ public class PessoaController {
      * na classe {@link br.com.taina.validation.PessoaValidation}.
      */
     @PostMapping
-    @Operation(summary = "Cadastro de uma nova pessoa")
+    @Operation(summary = "Cadastro de uma nova pessoa.")
     public ResponseEntity<PessoaDTO> save(@RequestBody PessoaDTO pessoaDTO) {
     	PessoaDTO pessoaCadastrada = pessoaService.save(pessoaDTO);
         return ResponseEntity.status(201).body(pessoaCadastrada);

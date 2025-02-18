@@ -81,7 +81,7 @@ public class PessoaService {
                 throw new NadaParaListarException("Nenhuma pessoa encontrada para listar.");
             }
 
-            // Mapeando as propriedades de pessoa para pessoaDTO
+            // Mapeando as propriedades de pessoa para pessoaDTO e adicionando em uma lista de pessoas 
             return pessoas.stream().map(pessoa -> new PessoaDTO(
                             pessoa.getId(),
                             pessoa.getNome(),
@@ -204,7 +204,6 @@ public class PessoaService {
         if (id == null) {
             throw new CampoNotNullException("Erro! Campo ID não pode ser nulo.");
         }
-
        
             Pessoa pessoa = pessoaRepository.findById(id)
                     .orElseThrow(() -> new IdNotFoundException("Pessoa com ID " + id + " não encontrada para exclusão"));
