@@ -114,7 +114,7 @@ Aqui estão os principais endpoints da API e os detalhes de como interagir com e
     </tr>
      <tr>
       <td><kbd>GET /api/contatos/pessoa/{idPessoa}</kbd></td>
-      <td>Retorna os dados de uma pessoa por ID para mala direta.</td>
+      <td>Retorna todos os contatos de uma pessoa.</td>
     </tr>
      <tr>
       <td><kbd>PUT /api/contatos/{id}</kbd></td>
