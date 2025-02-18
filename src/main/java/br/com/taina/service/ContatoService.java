@@ -89,6 +89,8 @@ public class ContatoService {
                     .orElseThrow(() -> new IdNotFoundException("Contato com ID " + id + " não encontrado"));
 
             return new ContatoDTO(contato.getId(), contato.getTipoContato().name(), contato.getContato(), contato.getPessoa().getId());
+        }catch (IdNotFoundException e) {
+            throw new IdNotFoundException(e.getMessage());
         } catch (Exception e) {
             throw new ErroServidorException(e.getMessage());
         }
@@ -125,8 +127,6 @@ public class ContatoService {
             throw new ErroServidorException(e.getMessage()); 
         }
     }
-
-
 
 
     /**
