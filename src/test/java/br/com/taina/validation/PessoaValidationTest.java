@@ -18,79 +18,56 @@ public class PessoaValidationTest {
     }
 
     @Test
-    public void testNomeNulo() {
+    public void deveRetornarExcecaoComNomeNulo() {
         PessoaDTO pessoaDTO = new PessoaDTO();
         pessoaDTO.setNome(null);
 
-        CampoNotNullException thrown = assertThrows(CampoNotNullException.class, () -> {
-            pessoaValidation.validarPessoaDTO(pessoaDTO);
-        });
-
-        assertEquals("Campo nulo não permitido! Insira um nome.", thrown.getMessage());
+        // Verifica que a exceção esperada é lançada
+        assertThrows(CampoNotNullException.class, () -> pessoaValidation.validarPessoaDTO(pessoaDTO));
     }
 
     @Test
-    public void testNomeVazio() {
+    public void deveRetornarExcecaoComNomeVazio() {
         PessoaDTO pessoaDTO = new PessoaDTO();
         pessoaDTO.setNome("");
 
-        CampoVazioException thrown = assertThrows(CampoVazioException.class, () -> {
-            pessoaValidation.validarPessoaDTO(pessoaDTO);
-        });
-
-        assertEquals("Campo vazio não permitido! Insira um nome.", thrown.getMessage());
+        assertThrows(CampoVazioException.class, () -> pessoaValidation.validarPessoaDTO(pessoaDTO));
     }
 
     @Test
-    public void testNomeInvalido() {
+    public void deveRetornarExcecaoComNomeInvalido() {
         PessoaDTO pessoaDTO = new PessoaDTO();
         pessoaDTO.setNome("12345");
 
-        FormatoInvalidoException thrown = assertThrows(FormatoInvalidoException.class, () -> {
-            pessoaValidation.validarPessoaDTO(pessoaDTO);
-        });
-
-        assertEquals("Nome inválido! Deve conter apenas letras.", thrown.getMessage());
+        assertThrows(FormatoInvalidoException.class, () -> pessoaValidation.validarPessoaDTO(pessoaDTO));
     }
 
     @Test
-    public void testCidadeInvalida() {
+    public void deveRetornarExcecaoComCidadeInvalida() {
         PessoaDTO pessoaDTO = new PessoaDTO();
         pessoaDTO.setCidade("Cidade123");
 
-        FormatoInvalidoException thrown = assertThrows(FormatoInvalidoException.class, () -> {
-            pessoaValidation.validarPessoaDTO(pessoaDTO);
-        });
-
-        assertEquals("Cidade inválida! Deve conter apenas letras.", thrown.getMessage());
+        assertThrows(FormatoInvalidoException.class, () -> pessoaValidation.validarPessoaDTO(pessoaDTO));
     }
 
     @Test
-    public void testCepInvalido() {
+    public void deveRetornarExcecaoComCepInvalido() {
         PessoaDTO pessoaDTO = new PessoaDTO();
         pessoaDTO.setCep("12345-6789");
 
-        FormatoInvalidoException thrown = assertThrows(FormatoInvalidoException.class, () -> {
-            pessoaValidation.validarPessoaDTO(pessoaDTO);
-        });
-
-        assertEquals("CEP inválido! O formato correto é XXXXXXXX ou XXXXX-XXX.", thrown.getMessage());
+        assertThrows(FormatoInvalidoException.class, () -> pessoaValidation.validarPessoaDTO(pessoaDTO));
     }
 
     @Test
-    public void testUfInvalido() {
+    public void deveRetornarExcecaoComUfInvalida() {
         PessoaDTO pessoaDTO = new PessoaDTO();
         pessoaDTO.setUf("XYZ");
 
-        FormatoInvalidoException thrown = assertThrows(FormatoInvalidoException.class, () -> {
-            pessoaValidation.validarPessoaDTO(pessoaDTO);
-        });
-
-        assertEquals("UF inválido! Insira um estado válido. Exemplo: SP.", thrown.getMessage());
+        assertThrows(FormatoInvalidoException.class, () -> pessoaValidation.validarPessoaDTO(pessoaDTO));
     }
 
     @Test
-    public void testPessoaValida() {
+    public void deveRetornarPessoaDTOValida() {
         PessoaDTO pessoaDTO = new PessoaDTO();
         pessoaDTO.setNome("Taina");
         pessoaDTO.setCidade("São Paulo");

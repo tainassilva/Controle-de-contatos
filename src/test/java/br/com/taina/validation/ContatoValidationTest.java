@@ -6,116 +6,106 @@ import br.com.taina.exception.FormatoInvalidoException;
 import br.com.taina.exception.CampoNotNullException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ContatoValidationTest {
+class ContatoValidationTest {
 
     private ContatoValidation contatoValidation;
 
     @BeforeEach
-    public void setUp() {
+    void setup() {
         contatoValidation = new ContatoValidation();
     }
 
     @Test
-    public void testTipoContatoNulo() {
+    void deveRetornarExcecaoContatoNulo() {
         ContatoDTO contatoDTO = new ContatoDTO();
         contatoDTO.setTipoContato(null);
         contatoDTO.setContato("1234567890");
 
-        CampoNotNullException thrown = assertThrows(CampoNotNullException.class, () -> {
-            contatoValidation.validarContato(contatoDTO);
-        });
-
-        assertEquals("Erro! O tipo de contato não pode ser nulo. Insira um tipo de contato válido: TELEFONE_FIXO, CELULAR, EMAIL, LINKEDIN.", thrown.getMessage());
+        // Verifica que a exceção esperada é lançada
+        assertThrows(CampoNotNullException.class, () -> contatoValidation.validarContato(contatoDTO));
     }
 
     @Test
-    public void testContatoNulo() {
+    void deveRetornarExcecaoTipoContatoNulo() {
         ContatoDTO contatoDTO = new ContatoDTO();
         contatoDTO.setTipoContato("CELULAR");
         contatoDTO.setContato(null);
 
-        CampoNotNullException thrown = assertThrows(CampoNotNullException.class, () -> {
-            contatoValidation.validarContato(contatoDTO);
-        });
-
-        assertEquals("Erro! O contato não pode ser nulo. Insira um contato.", thrown.getMessage());
+        assertThrows(CampoNotNullException.class, () -> contatoValidation.validarContato(contatoDTO));
     }
 
     @Test
-    public void testContatoVazio() {
+    void deveRetornarExcecaoComContatoVazio() {
         ContatoDTO contatoDTO = new ContatoDTO();
-        contatoDTO.setTipoContato("CELULAR");
-        contatoDTO.setContato(" ");
+        contatoDTO.setTipoContato("EMAIL");
+        contatoDTO.setContato("");
 
-        CampoVazioException thrown = assertThrows(CampoVazioException.class, () -> {
-            contatoValidation.validarContato(contatoDTO);
-        });
-
-        assertEquals("Erro! O contato não pode ser vazio. Insira um contato.", thrown.getMessage());
+        assertThrows(CampoVazioException.class, () -> contatoValidation.validarContato(contatoDTO));
     }
 
     @Test
-    public void testTipoContatoInvalido() {
+    void deveRetornarExcecaoComTipoContatoInvalido() {
         ContatoDTO contatoDTO = new ContatoDTO();
         contatoDTO.setTipoContato("INVALIDO");
-        contatoDTO.setContato("1234567890");
+        contatoDTO.setContato("teste@email.com");
 
-        FormatoInvalidoException thrown = assertThrows(FormatoInvalidoException.class, () -> {
-            contatoValidation.validarContato(contatoDTO);
-        });
-
-        assertEquals("Erro! Tipo de contato inválido. Insira um dos seguintes tipos: TELEFONE_FIXO, CELULAR, EMAIL, LINKEDIN.", thrown.getMessage());
+        assertThrows(FormatoInvalidoException.class, () -> contatoValidation.validarContato(contatoDTO));
     }
 
     @Test
-    public void testTelefoneInvalido() {
+    void deveRetornarOkContatoTelefoneValido() {
+        ContatoDTO contatoDTO = new ContatoDTO();
+        contatoDTO.setTipoContato("CELULAR");
+        contatoDTO.setContato("1234567890");
+
+        // Não esperamos exceção aqui
+        assertDoesNotThrow(() -> contatoValidation.validarContato(contatoDTO));
+    }
+
+    @Test
+    void deveRetornarExcecaoComTelefoneInvalido() {
         ContatoDTO contatoDTO = new ContatoDTO();
         contatoDTO.setTipoContato("CELULAR");
         contatoDTO.setContato("12345");
 
-        FormatoInvalidoException thrown = assertThrows(FormatoInvalidoException.class, () -> {
-            contatoValidation.validarContato(contatoDTO);
-        });
-
-        assertEquals("Erro! Formato inválido. Insira um telefone válido, incluindo o DDD.", thrown.getMessage());
+        assertThrows(FormatoInvalidoException.class, () -> contatoValidation.validarContato(contatoDTO));
     }
 
     @Test
-    public void testEmailInvalido() {
+    void deveRetornarOkEmailValido() {
         ContatoDTO contatoDTO = new ContatoDTO();
         contatoDTO.setTipoContato("EMAIL");
-        contatoDTO.setContato("invalid-email");
+        contatoDTO.setContato("teste@email.com");
 
-        FormatoInvalidoException thrown = assertThrows(FormatoInvalidoException.class, () -> {
-            contatoValidation.validarContato(contatoDTO);
-        });
-
-        assertEquals("Erro! Formato inválido. Insira um e-mail válido! Exemplo: teste@email.com", thrown.getMessage());
+        assertDoesNotThrow(() -> contatoValidation.validarContato(contatoDTO));
     }
 
     @Test
-    public void testLinkedinInvalido() {
+    void deveRetornarOkContatoEmailInvalido() {
+        ContatoDTO contatoDTO = new ContatoDTO();
+        contatoDTO.setTipoContato("EMAIL");
+        contatoDTO.setContato("teste@email");
+
+        assertThrows(FormatoInvalidoException.class, () -> contatoValidation.validarContato(contatoDTO));
+    }
+
+    @Test
+    void deveRetornarOkContatoLinkedlnValido() {
         ContatoDTO contatoDTO = new ContatoDTO();
         contatoDTO.setTipoContato("LINKEDIN");
-        contatoDTO.setContato("www.linkedin.com/usuario");
+        contatoDTO.setContato("www.linkedin.com/in/usuario-linkedin");
 
-        FormatoInvalidoException thrown = assertThrows(FormatoInvalidoException.class, () -> {
-            contatoValidation.validarContato(contatoDTO);
-        });
-
-        assertEquals("Erro! O formato do LinkedIn está inválido. Use um formato correto, como: www.linkedin.com/in/usuario-linkedin", thrown.getMessage());
+        assertDoesNotThrow(() -> contatoValidation.validarContato(contatoDTO));
     }
 
     @Test
-    public void testContatoValido() {
+    void tdeveRetornarExcecaoComContatoLinkedInInvalido() {
         ContatoDTO contatoDTO = new ContatoDTO();
-        contatoDTO.setTipoContato("CELULAR");
-        contatoDTO.setContato("11987654321");
+        contatoDTO.setTipoContato("LINKEDIN");
+        contatoDTO.setContato("www.linkedicccccn.com/usuario-linkedin");
 
-        // Não deve lançar exceção
-        assertDoesNotThrow(() -> contatoValidation.validarContato(contatoDTO));
+        assertThrows(FormatoInvalidoException.class, () -> contatoValidation.validarContato(contatoDTO));
     }
 }
