@@ -10,7 +10,6 @@ import br.com.taina.exception.CampoNotNullException;
 import br.com.taina.exception.NadaParaListarException;
 import br.com.taina.model.Pessoa;
 import br.com.taina.repository.PessoaRepository;
-import br.com.taina.validation.PessoaValidation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;

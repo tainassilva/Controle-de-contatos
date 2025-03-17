@@ -12,7 +12,6 @@ import br.com.taina.exception.NadaParaListarException;
 import br.com.taina.exception.CampoNotNullException;
 import br.com.taina.model.Pessoa;
 import br.com.taina.repository.PessoaRepository;
-import br.com.taina.validation.PessoaValidation;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,9 +27,6 @@ public class PessoaService {
     @Autowired
     PessoaRepository pessoaRepository;
 
-    @Autowired
-    PessoaValidation pessoaValidation;
-
     /**
      * Cria um novo registro de pessoa no banco de dados.
      * 
@@ -42,21 +38,23 @@ public class PessoaService {
             Pessoa pessoa = new Pessoa();
             pessoa.setNome(pessoaDTO.getNome());
             pessoa.setEndereco(pessoaDTO.getEndereco());
+            pessoa.setNumeroCasa(pessoaDTO.getNumeroCasa());
             pessoa.setCep(pessoaDTO.getCep());
             pessoa.setCidade(pessoaDTO.getCidade());
 
             if (pessoaDTO.getUf() != null) {
-                pessoa.setUf(Estados.valueOf(pessoaDTO.getUf().toUpperCase())); // Convertendo para Enum caso não seja nulo
+                pessoa.setUf(Estados.valueOf(pessoaDTO.getUf().toUpperCase()));
             } else {
-                pessoa.setUf(null); // Permitir UF nula
+                pessoa.setUf(null);
             }
 
             try {
             pessoa = pessoaRepository.save(pessoa);
 
             return new PessoaDTO(pessoa.getId(), pessoa.getNome(), pessoa.getEndereco(),
+                    pessoa.getNumeroCasa(),
                     pessoa.getCep(), pessoa.getCidade(), 
-                    pessoa.getUf() != null ? pessoa.getUf().name() : null); // retorna o uf caso não seja nulo, se não , retorna nulo
+                    pessoa.getUf() != null ? pessoa.getUf().name() : null);
 
         } catch (ErroServidorException e) {
             throw new ErroServidorException("Erro ao salvar a pessoa: " + e.getMessage());
@@ -81,6 +79,7 @@ public class PessoaService {
                             pessoa.getId(),
                             pessoa.getNome(),
                             pessoa.getEndereco(),
+                            pessoa.getNumeroCasa(),
                             pessoa.getCep(),
                             pessoa.getCidade(),
                             pessoa.getUf() != null ? pessoa.getUf().name() : null // Converte o Enum 'uf' para String
@@ -111,6 +110,7 @@ public class PessoaService {
                         pessoa.getId(),
                         pessoa.getNome(),
                         pessoa.getEndereco(),
+                        pessoa.getNumeroCasa(),
                         pessoa.getCep(),
                         pessoa.getCidade(),
                         pessoa.getUf() != null ? pessoa.getUf().name() : null 
@@ -161,8 +161,6 @@ public class PessoaService {
                     .orElseThrow(() -> new IdNotFoundException("Pessoa com ID " + id + " não encontrada para atualização!"));
 
 
-            pessoaValidation.validarPessoaDTO(pessoaDTO);
-
             pessoa.setNome(pessoaDTO.getNome());
             pessoa.setEndereco(pessoaDTO.getEndereco());
             pessoa.setCep(pessoaDTO.getCep());
@@ -179,6 +177,7 @@ public class PessoaService {
             pessoa = pessoaRepository.save(pessoa);
 
             return new PessoaDTO(pessoa.getId(), pessoa.getNome(), pessoa.getEndereco(),
+                                 pessoa.getNumeroCasa(),
                                  pessoa.getCep(), pessoa.getCidade(),
                                  pessoa.getUf() != null ? pessoa.getUf().name() : null);
 

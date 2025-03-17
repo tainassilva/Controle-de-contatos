@@ -30,10 +30,10 @@ public class Pessoa {
     @Column(nullable = false, length = 100)
     private String nome;
 
-   @Column(length = 150)
-   private String endereco;
+    @Column(length = 150)
+    private String endereco;
 
-    @Column(length = 6)
+    @Column(length = 8)
     private String numeroCasa;
 
     @Column(length = 8)

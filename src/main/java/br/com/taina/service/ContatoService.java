@@ -62,8 +62,6 @@ public class ContatoService {
         novoContato.setPessoa(pessoa);
         pessoa.getContatos().add(novoContato);
 
-
-        
         try {
             novoContato = contatoRepository.save(novoContato);
             pessoaRepository.save(pessoa);

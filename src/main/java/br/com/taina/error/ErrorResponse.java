@@ -1,18 +1,18 @@
 package br.com.taina.error;
 
+import java.util.List;
+
 /**
  * Classe que representa uma resposta de erro padronizada.
- * Contém um código de status HTTP e uma mensagem associada ao erro.
+ * Contém um código de status HTTP e uma lista de mensagens associadas aos erros.
  */
 public class ErrorResponse {
-    
     private int statusCode;
-    
-    private String message;
+    private List<String> erros;
 
-    public ErrorResponse(int statusCode, String message) {
+    public ErrorResponse(int statusCode, List<String> erros) {
         this.statusCode = statusCode;
-        this.message = message;
+        this.erros = erros;
     }
 
     public int getStatusCode() {
@@ -23,11 +23,11 @@ public class ErrorResponse {
         this.statusCode = statusCode;
     }
 
-    public String getMessage() {
-        return message;
+    public List<String> getErros() {
+        return erros;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setErros(List<String> erros) {
+        this.erros = erros;
     }
 }

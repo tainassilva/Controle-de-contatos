@@ -1,10 +1,11 @@
 package br.com.taina.dto;
 
-
+import br.com.taina.validation.constraint.TipoContatoValid;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-//import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 
 /**
  * Classe DTO responsável por representar os dados de contato de uma pessoa.
@@ -25,25 +26,21 @@ public class ContatoDTO {
 	
 	@Schema(description = "Tipos de contato da pessoa.",
 			example = "CELULAR")
+	@NotBlank(message = "Erro! O tipo de contato não pode ser nulo ou vazio.")
 	private String tipoContato;
 	
 	@Schema(description = "Contato da pessoa", 
 			example = "11974510719")
+	@NotBlank(message= "Erro! O contato não pode ser nulo ou vazio.")
+	@TipoContatoValid(message= "Erro! Insira um contato válido.")
 	private String contato;
 	
 	@Schema(description = "ID da pessoa que possui o contato",
 			example = "1")
+	@Pattern(regexp = "^\\d+$\n", message= "Erro! Campo IDPessoa aceita apenas números.")
     private Long idPessoa;
     
     public ContatoDTO() {};
- 
-
-	public ContatoDTO(String tipoContato, String contato, Long idPessoa) {
-		this.tipoContato = tipoContato;
-		this.contato = contato;
-		this.idPessoa = idPessoa;
-	}
-	
 
 	public ContatoDTO(Long id, String tipoContato, String contato, Long idPessoa) {
 		this.id = id;

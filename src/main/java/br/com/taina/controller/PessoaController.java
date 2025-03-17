@@ -2,6 +2,7 @@ package br.com.taina.controller;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,7 +40,7 @@ public class PessoaController {
      */
     @PostMapping
     @Operation(summary = "Cadastro de uma nova pessoa.")
-    public ResponseEntity<PessoaDTO> save(@RequestBody PessoaDTO pessoaDTO) {
+    public ResponseEntity<PessoaDTO> save(@Valid @RequestBody PessoaDTO pessoaDTO) {
     	PessoaDTO pessoaCadastrada = pessoaService.save(pessoaDTO);
         return ResponseEntity.status(201).body(pessoaCadastrada);
     }
@@ -98,7 +99,7 @@ public class PessoaController {
      */
     @PutMapping("/{id}")
     @Operation(summary = "Atualiza as informações de uma pessoa")
-    public ResponseEntity<PessoaDTO> update(@PathVariable Long id, @RequestBody PessoaDTO pessoaDTO) {
+    public ResponseEntity<PessoaDTO> update(@PathVariable Long id, @Valid @RequestBody PessoaDTO pessoaDTO) {
         PessoaDTO pessoaAtualizada = pessoaService.update(id, pessoaDTO);
         return ResponseEntity.ok(pessoaAtualizada);
     }

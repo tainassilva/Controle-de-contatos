@@ -41,47 +41,12 @@ public class ContatoValidation {
         return !Pattern.matches(regexLinkedIn, linkedIn);
     }
 
-   
-    private boolean isContatoNulo(String contato) {
-        return contato == null;
-    }
-
-    
-    private boolean isContatoVazio(String contato) {
-        return contato.trim().isEmpty();
-    }
-
-   
-    private boolean isTipoContatoNulo(String tipoContato) {
-        return tipoContato == null;
-    }
-
     /**
      * Método principal para validar um objeto ContatoDTO.
      * Verifica se o tipo de contato, o contato em si e o formato do contato estão válidos.
      * @param contatoDTO Objeto contendo os dados do contato a ser validado.
      */
     public void validarContato(ContatoDTO contatoDTO) {
-        if (isTipoContatoNulo(contatoDTO.getTipoContato())) {
-            throw new CampoNotNullException("Erro! O tipo de contato não pode ser nulo. Insira um tipo de contato válido: "
-                    + "TELEFONE_FIXO, CELULAR, EMAIL, LINKEDIN.");
-        }
-
-        if (isContatoNulo(contatoDTO.getContato())) {
-            throw new CampoNotNullException("Erro! O contato não pode ser nulo. Insira um contato.");
-        }
-
-        if (isContatoVazio(contatoDTO.getContato())) {
-            throw new CampoVazioException("Erro! O contato não pode ser vazio. Insira um contato.");
-        }
-
-        try {
-            TipoContato.valueOf(contatoDTO.getTipoContato().trim().toUpperCase());
-        } catch (IllegalArgumentException e) {
-            throw new FormatoInvalidoException("Erro! Tipo de contato inválido. Insira um dos seguintes tipos: "
-                    + "TELEFONE_FIXO, CELULAR, EMAIL, LINKEDIN.");
-        }
-
         switch (TipoContato.valueOf(contatoDTO.getTipoContato().trim().toUpperCase())) {
             case CELULAR:
             case TELEFONE_FIXO:

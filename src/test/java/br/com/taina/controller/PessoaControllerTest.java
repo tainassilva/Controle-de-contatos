@@ -40,7 +40,7 @@ public class PessoaControllerTest {
 
     // Mocando os dados para testar
     private PessoaDTO mockPessoa() {
-        return new PessoaDTO(1L, "Taina", "Rua Penha, 102", "06700000", "Cotia", "SP");
+       // return new PessoaDTO(1L, "Taina", "Rua Penha, 102", "06700000", "Cotia", "SP");
     }
 
     @Test

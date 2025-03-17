@@ -28,7 +28,6 @@ public class Contato {
     
     @Column(nullable = false, length = 50)
     private String contato;
-
     
     @ManyToOne
     @JoinColumn(name = "id_pessoa")
