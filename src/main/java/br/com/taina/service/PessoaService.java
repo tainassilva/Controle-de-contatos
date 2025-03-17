@@ -38,8 +38,6 @@ public class PessoaService {
      * Depois, persiste a pessoa no banco e retorna o DTO com os dados salvos
      */
     public PessoaDTO save(PessoaDTO pessoaDTO) {
-            // Valida os dados da pessoa
-            pessoaValidation.validarPessoaDTO(pessoaDTO);
 
             Pessoa pessoa = new Pessoa();
             pessoa.setNome(pessoaDTO.getNome());
@@ -64,9 +62,6 @@ public class PessoaService {
             throw new ErroServidorException("Erro ao salvar a pessoa: " + e.getMessage());
         }
     }
-
-
-
 
     /**
      * Retorna todas as pessoas registradas no banco de dados.

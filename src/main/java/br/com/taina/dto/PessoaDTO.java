@@ -18,7 +18,7 @@ public class PessoaDTO {
 	
 	@Schema(description = "Endereço da pessoa.", example = "Rua Penha, 102")
 	private String endereco;
-	
+
 	@Schema(description = "Cep da pessoa. Exemplo de formato:  XXXXX-XXX ou XXXXXXXX", example = "06700000")
 	private String cep;
 	
@@ -91,7 +91,7 @@ public class PessoaDTO {
 
 	@Override
 	public String toString() {
-		return "PessoasDTO [id=" + id + ", nome=" + nome + ", endereco=" + endereco + 
+		return "PessoasDTO [id=" + id + ", nome=" + nome + ", endereco=" + endereco +
 				           ", cep=" + cep + ", cidade=" + cidade + ", uf=" + uf + "]";
 	}	
 }

@@ -2,10 +2,13 @@ package br.com.taina.model;
 
 import br.com.taina.enums.Estados;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.validation.constraints.*;
 
 /**
  * Representa uma pessoa mapeada para uma tabela no banco de dados. Contém informações pessoais, como nome, endereço, 
@@ -24,40 +27,44 @@ public class Pessoa {
     private Long id;
 
    
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String nome;
 
-    private String endereco;
+   @Column(length = 150)
+   private String endereco;
+
+    @Column(length = 6)
+    private String numeroCasa;
+
+    @Column(length = 8)
     private String cep;
+
+    @Column(length = 50)
     private String cidade;
 
     @Enumerated(EnumType.STRING)
+    @Column(length = 2)
     private Estados uf;
 
-    @JsonIgnore // Ignora o campo durante a serialização para evitar erros de processamento. 
-    // O campo é excluído porque o PessoaDTO não contém uma lista de contatos, apenas os dados da pessoa.
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pessoa", targetEntity = Contato.class)
+    // Não carrega imediatamente a lista de contatos, apenas quando ela for acessada explicitamente...
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pessoa", targetEntity = Contato.class, fetch = FetchType.LAZY)
     private List<Contato> contatos;
 
     public Pessoa() {}
-    
-
-    public Pessoa(Long id, String nome, String endereco, String cep, String cidade, Estados uf,
-			List<Contato> contatos) {
-		super();
-		this.id = id;
-		this.nome = nome;
-		this.endereco = endereco;
-		this.cep = cep;
-		this.cidade = cidade;
-		this.uf = uf;
-		this.contatos = contatos;
-	}
 
 
+    public Pessoa(Long id, String nome, String endereco, String numeroCasa, String cep, String cidade, Estados uf, List<Contato> contatos) {
+        this.id = id;
+        this.nome = nome;
+        this.endereco = endereco;
+        this.numeroCasa = numeroCasa;
+        this.cep = cep;
+        this.cidade = cidade;
+        this.uf = uf;
+        this.contatos = contatos;
+    }
 
-
-	public Long getId() {
+    public Long getId() {
 		return id;
 	}
 
@@ -79,6 +86,14 @@ public class Pessoa {
 
     public void setEndereco(String endereco) {
         this.endereco = endereco;
+    }
+
+    public String getNumeroCasa() {
+        return numeroCasa;
+    }
+
+    public void setNumeroCasa(String numeroCasa) {
+        this.numeroCasa = numeroCasa;
     }
 
     public String getCep() {
@@ -104,8 +119,6 @@ public class Pessoa {
     public void setUf(Estados uf) {
         this.uf = uf;
     }
-    
-    
 
     public List<Contato> getContatos() {
 		return contatos;
@@ -115,9 +128,31 @@ public class Pessoa {
 		this.contatos = contatos;
 	}
 
-	@Override
-	public String toString() {
-		return "Pessoa [id=" + id + ", nome=" + nome + ", endereco=" + endereco + ", cep=" + cep + ", cidade=" + cidade
-				+ ", uf=" + uf + "]";
-	}
+    @Override
+    public String toString() {
+        return "Pessoa{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", endereco='" + endereco + '\'' +
+                ", numeroCasa='" + numeroCasa + '\'' +
+                ", cep='" + cep + '\'' +
+                ", cidade='" + cidade + '\'' +
+                ", uf=" + uf +
+                ", contatos=" + contatos +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Pessoa pessoa = (Pessoa) o;
+        return Objects.equals(id, pessoa.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
 }
