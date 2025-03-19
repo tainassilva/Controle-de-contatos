@@ -4,6 +4,8 @@ import br.com.taina.enums.TipoContato;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 /**
  * Representa um contato de uma pessoa mapeada para uma tabela no banco de dados 
  * e contém informações sobre o tipo e o valor do contato, além de uma referência à pessoa associada. Também temos a relação
@@ -73,9 +75,24 @@ public class Contato {
     public void setPessoa(Pessoa pessoa) {
         this.pessoa = pessoa;
     }
-    
+
+
     @Override
     public String toString() {
-        return "Contato [id=" + id + ", tipoContato=" + tipoContato + ", contato=" + contato + ", pessoa=" + pessoa + "]";
+        return "Contato [id=" + id + "," +
+                " tipoContato=" + tipoContato + "," +
+                " contato=" + contato + "," +
+                " pessoa=" + pessoa + "]";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Contato contato1)) return false;
+        return Objects.equals(getId(), contato1.getId()) && getTipoContato() == contato1.getTipoContato() && Objects.equals(getContato(), contato1.getContato()) && Objects.equals(getPessoa(), contato1.getPessoa());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getTipoContato(), getContato(), getPessoa());
     }
 }

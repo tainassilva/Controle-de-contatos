@@ -144,15 +144,12 @@ public class Pessoa {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Pessoa pessoa = (Pessoa) o;
-        return Objects.equals(id, pessoa.id);
+        if (!(o instanceof Pessoa pessoa)) return false;
+        return Objects.equals(getId(), pessoa.getId()) && Objects.equals(getNome(), pessoa.getNome()) && Objects.equals(getEndereco(), pessoa.getEndereco()) && Objects.equals(getNumeroCasa(), pessoa.getNumeroCasa()) && Objects.equals(getCep(), pessoa.getCep()) && Objects.equals(getCidade(), pessoa.getCidade()) && getUf() == pessoa.getUf() && Objects.equals(getContatos(), pessoa.getContatos());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(getId(), getNome(), getEndereco(), getNumeroCasa(), getCep(), getCidade(), getUf(), getContatos());
     }
-
 }
