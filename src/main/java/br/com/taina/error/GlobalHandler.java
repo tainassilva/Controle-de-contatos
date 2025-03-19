@@ -62,12 +62,6 @@ public class GlobalHandler {
 		return ResponseEntity.status(422).body(error);
 	}
 
-	@ExceptionHandler(CampoVazioException.class)
-	public ResponseEntity<ErrorResponse> handleCampoVazio(CampoVazioException ex) {
-		ErrorResponse error = new ErrorResponse(400, Collections.singletonList(ex.getMessage()));
-		return ResponseEntity.status(400).body(error);
-	}
-
 	@ExceptionHandler(CampoNotNullException.class)
 	public ResponseEntity<ErrorResponse> handleCampoNotNull(CampoNotNullException ex) {
 		ErrorResponse error = new ErrorResponse(400, Collections.singletonList(ex.getMessage()));
