@@ -1,6 +1,8 @@
 package br.com.taina.controller;
 
 import java.util.List;
+
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,10 +15,8 @@ import io.swagger.v3.oas.annotations.Operation;
  * Controlador responsável pelo gerenciamento de contatos de uma pessoa.
  * Fornece endpoints para criação, consulta, atualização, listagem e remoção de contatos.
  * 
- * Os status de erro HTTP são tratados na classe {@link br.com.taina.validation.contato.ContatoHandler},
- * que, caso sejam encontrados dados inadequados, utiliza as validações definidas na classe 
- * {@link br.com.taina.validation.ContatoValidation}, lançando exceções personalizadas do 
- * pacote {@link br.com.taina.validation.exception.contato}.
+ * Os status de erro HTTP são tratados na classe {@link br.com.taina.error.GlobalHandler},
+ * lançando exceções personalizadas do pacote {@link br.com.taina.exception}.
  */
 @RestController
 @RequestMapping("/api/contatos")
@@ -34,7 +34,7 @@ public class ContatoController {
      */
     @PostMapping
     @Operation(summary = "Salva um novo contato para uma pessoa.")
-    public ResponseEntity<ContatoDTO> save(@RequestBody ContatoDTO contatoDTO) {
+    public ResponseEntity<ContatoDTO> save(@Valid @RequestBody ContatoDTO contatoDTO) {
         ContatoDTO salvarContato = contatoService.save(contatoDTO);
         return ResponseEntity.status(201).body(salvarContato);
     }
@@ -74,7 +74,7 @@ public class ContatoController {
      */
     @PutMapping("/{id}")
     @Operation(summary = "Atualiza um contato existente por ID.")
-    public ResponseEntity<ContatoDTO> update(@PathVariable Long id, @RequestBody ContatoDTO contatoDTO) {
+    public ResponseEntity<ContatoDTO> update(@PathVariable Long id, @Valid @RequestBody ContatoDTO contatoDTO) {
         ContatoDTO updContato = contatoService.update(id, contatoDTO);
         return ResponseEntity.ok(updContato);
     }
