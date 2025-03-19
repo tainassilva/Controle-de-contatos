@@ -2,15 +2,19 @@ package br.com.taina.dto;
 
 import br.com.taina.validation.constraint.AllowsOnlyLettersAndSpaces;
 import br.com.taina.validation.constraint.CepValid;
+import br.com.taina.validation.constraint.NullNotBlank;
 import br.com.taina.validation.constraint.UFValid;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.*;
+
+import java.util.Objects;
 
 
 /**
  * Classe DTO responsável por representar os dados de uma pessoa, sem incluir a lista de contatos.
  * Neste momento, não é necessário expor a lista de contatos da pessoa.
+ *
+ *  Essa classe também contém algumas annotations para validar os campos.
  */
 
 public class PessoaDTO {
@@ -24,30 +28,30 @@ public class PessoaDTO {
 	private String nome;
 
 	@Schema(description = "Endereço da pessoa.", example = "Rua Penha")
-	@Nullable
 	@AllowsOnlyLettersAndSpaces(message = "Erro! Campo endereço aceita apenas letras e espaços.")
-	@Size(min = 5, max = 100, message = "O campo endereço deve conter entre 5 e 100 letras.")
+	@NullNotBlank(message = "Erro! O campo endereço não pode ser vazio.")
+	@Size(min = 5, max = 100, message = "O campo endereço deve conter entre 5 e 100 caracteres.")
 	private String endereco;
 
-	@Schema(description = "Número da casa da pessoa com complemento.", example = "12345A")
-	@Nullable
+	@Schema(description = "Número da casa da pessoa com complemento.", example = "12345")
+	@NullNotBlank(message = "Erro! O campo número não pode ser vazio.")
 	@Size(min = 1, max = 8, message= "Erro! O campo numero da casa aceita apenas 8 números")
-	@Pattern(regexp = "^[a-zA-Z0-9]+$", message = "Erro! O campo número da casa deve conter apenas letras e números.")
+	@Pattern(regexp = "^[0-9]+$", message = "Erro! O campo número da casa deve conter apenas números.")
 	private String numeroCasa;
 
+	@NullNotBlank(message = "Erro! O campo cep não pode ser vazio.")
 	@Schema(description = "Cep da pessoa. Exemplo de formato:  XXXXX-XXX ou XXXXXXXX", example = "06700000")
 	@CepValid
 	private String cep;
 
 	@Schema(description = "Cidade da pessoa", example = "Cotia")
-	@Nullable
+	@NullNotBlank(message = "Erro! O campo cidade não pode ser vazio.")
 	@AllowsOnlyLettersAndSpaces(message = "Erro! Campo cidade aceita apenas letras e espaços.")
 	private String cidade;
 
 	@Schema(description = "Estado da pessoa (UF)", example = "SP")
-	@Nullable
+	@NullNotBlank(message = "Erro! O campo UF não pode ser vazio.")
 	@UFValid
-	@Size(min = 2, max = 2)
 	private String uf;
 
 	public PessoaDTO() {}
@@ -123,5 +127,16 @@ public class PessoaDTO {
 	public String toString() {
 		return "PessoasDTO [id=" + id + ", nome=" + nome + ", endereco=" + endereco +
 				           ", cep=" + cep + ", cidade=" + cidade + ", uf=" + uf + "]";
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof PessoaDTO pessoaDTO)) return false;
+        return Objects.equals(getId(), pessoaDTO.getId()) && Objects.equals(getNome(), pessoaDTO.getNome()) && Objects.equals(getEndereco(), pessoaDTO.getEndereco()) && Objects.equals(getNumeroCasa(), pessoaDTO.getNumeroCasa()) && Objects.equals(getCep(), pessoaDTO.getCep()) && Objects.equals(getCidade(), pessoaDTO.getCidade()) && Objects.equals(getUf(), pessoaDTO.getUf());
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(getId(), getNome(), getEndereco(), getNumeroCasa(), getCep(), getCidade(), getUf());
 	}
 }
