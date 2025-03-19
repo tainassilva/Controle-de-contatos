@@ -15,11 +15,9 @@ import io.swagger.v3.oas.annotations.Operation;
 /**
  * Controlador responsável pelo gerenciamento de pessoas.
  * Fornece endpoints para criação, consulta, atualização, listagem e remoção de pessoas.
- * 
- * Os status de erro HTTP são tratados na classe {@link br.com.taina.validation.pessoa.PessoaHandler},
- * que, caso sejam encontrados dados inadequados, utiliza as validações definidas na classe 
- * {@link br.com.taina.validation.PessoaValidation}, lançando exceções personalizadas do 
- * pacote {@link br.com.taina.validation.exception.pessoa}.
+ *
+ * Os status de erro HTTP são tratados na classe {@link br.com.taina.error.GlobalHandler},
+ * lançando exceções personalizadas do pacote {@link br.com.taina.exception}.
  */
 
 @RestController
@@ -34,10 +32,8 @@ public class PessoaController {
      *
      * @param pessoaDTO Objeto contendo as informações da pessoa a ser cadastrada.
      * @return ResponseEntity contendo a pessoa cadastrada e o status 201 (Created).
-     * 
-     * Em caso de erros HTTP, pode ser devido a falhas no servidor ou validações definidas 
-     * na classe {@link br.com.taina.validation.PessoaValidation}.
-     */
+     *
+     * */
     @PostMapping
     @Operation(summary = "Cadastro de uma nova pessoa.")
     public ResponseEntity<PessoaDTO> save(@Valid @RequestBody PessoaDTO pessoaDTO) {
@@ -93,9 +89,7 @@ public class PessoaController {
      * @param pessoaDTO Objeto contendo as novas informações da pessoa.
      * @return ResponseEntity contendo a pessoa atualizada ou status 404 se não for encontrada.
      * 
-     * Em caso de erros HTTP, pode ser devido a falhas no servidor ou validações definidas na 
-     * classe {@link br.com.taina.validation.PessoaValidation}, que são as mesmas aplicadas 
-     * ao salvar uma pessoa.
+     * Em caso de erros HTTP, pode ser devido a falhas no servidor
      */
     @PutMapping("/{id}")
     @Operation(summary = "Atualiza as informações de uma pessoa")
