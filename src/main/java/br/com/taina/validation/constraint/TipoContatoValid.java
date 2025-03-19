@@ -12,7 +12,8 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface TipoContatoValid {
 
-    String message() default "";
+    String message() default "Erro! Tipo de contato inválido." +
+            " Insira um tipo de contato válido: TELEFONE, CELULAR, EMAIL ou LINKEDIN";
     Class<?>[] groups() default {};
     Class<? extends Payload> [] payload() default{};
 }

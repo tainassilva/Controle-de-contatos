@@ -7,6 +7,18 @@ import jakarta.validation.ConstraintValidatorContext;
 
 import java.util.List;
 
+/**
+ * Classe responsável por validar o campo de Unidade Federativa (UF) em uma String.
+ * Esta classe implementa a interface {@link ConstraintValidator}, que valida o valor de uma String
+ * de acordo com a anotação personalizada {@link UFValid}.
+ *
+ * A validação verifica se o valor fornecido corresponde a uma Unidade Federativa (UF) válida,
+ * conforme definido na enumeração {@link Estados}.
+ *
+ * A anotação {@link UFValid} pode ser usada para garantir que o valor da UF seja um código de estado válido.
+ *
+ * @see UFValid
+ */
 public class UFValidation implements ConstraintValidator<UFValid, String> {
 
     @Override
@@ -21,6 +33,7 @@ public class UFValidation implements ConstraintValidator<UFValid, String> {
 
         if (value != null) {
             try {
+                // Verifica se o valor fornecido corresponde a uma UF válida da enum Estados.
                 return estados.contains(Estados.valueOf(value.toUpperCase()));
             } catch (IllegalArgumentException e) {
                 return false;

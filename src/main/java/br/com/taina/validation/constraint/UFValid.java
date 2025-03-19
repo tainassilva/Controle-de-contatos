@@ -13,7 +13,7 @@ import java.lang.annotation.*;
 
 public @interface UFValid {
 
-    String message() default "Erro! O campo UF está inválido. Digite um estado brasileiro válido. EX: SP";
+    String message() default "Erro! O campo UF está inválido. Digite um estado brasileiro válido. Exemplo: SP";
     Class<?>[] groups() default {};
     Class<? extends Payload> [] payload() default{};
 }

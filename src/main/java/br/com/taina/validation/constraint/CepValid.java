@@ -11,7 +11,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface CepValid {
 
-    String message() default "Erro! O campo cep está inválido. Formato aceito : Apenas números : XXXXXXXX ou XXXXX-XXX.";
+    String message() default "Erro! O campo cep está inválido. Formato aceito : Apenas números e com 8 caracteres: XXXXXXXX ou XXXXX-XXX.";
     Class<?>[] groups() default {};
     Class<? extends Payload> [] payload() default{};
 }
