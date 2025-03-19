@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 /**
  * Serviço que oferece operações CRUD (Create, Read, Update, Delete) para a entidade {@link Pessoa}.
  * O serviço interage com o repositório {@link PessoaRepository} para realizar as operações no banco de dados.
- * As operações incluem salvar, buscar, atualizar e excluir registros de pessoas, além de validar os dados usando a classe {@link PessoaValidation}.
+ * As operações incluem salvar, buscar, atualizar e excluir registros de pessoas
  */
 @Service
 public class PessoaService {
