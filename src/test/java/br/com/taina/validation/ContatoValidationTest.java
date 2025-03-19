@@ -1,7 +1,6 @@
 package br.com.taina.validation;
 
 import br.com.taina.dto.ContatoDTO;
-import br.com.taina.exception.CampoVazioException;
 import br.com.taina.exception.FormatoInvalidoException;
 import br.com.taina.exception.CampoNotNullException;
 import org.junit.jupiter.api.BeforeEach;
