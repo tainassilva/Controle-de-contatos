@@ -15,7 +15,7 @@ public interface ContatoRepository extends JpaRepository<Contato, Long> {
     /**
      * Busca todos os contatos associados a uma pessoa específica.
      * 
-     * @param pessoa A pessoa associada aos contatos.
+     * @param idPessoa A pessoa associada aos contatos.
      * @return Uma lista de contatos associados à pessoa.
      */
 
