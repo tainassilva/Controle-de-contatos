@@ -1,6 +1,5 @@
 package br.com.taina.exception;
 
-@SuppressWarnings("serial")
 /**
  * Exceção personalizada lançada quando um formato de dado fornecido é considerado inválido.
  */
