@@ -4,11 +4,9 @@ import java.util.regex.Pattern;
 
 import org.springframework.stereotype.Component;
 
-import br.com.taina.dto.ContatoDTO;
+import br.com.taina.dto.contato.ContatoDTO;
 import br.com.taina.enums.TipoContato;
-import br.com.taina.exception.CampoVazioException;
 import br.com.taina.exception.FormatoInvalidoException;
-import br.com.taina.exception.CampoNotNullException;
 
 /**
  * Classe responsável pela validação de dados de contato, como telefone, celular, email e linkedln

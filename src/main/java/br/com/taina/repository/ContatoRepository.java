@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import br.com.taina.model.Contato;
+import br.com.taina.entity.Contato;
 
 @Repository
 public interface ContatoRepository extends JpaRepository<Contato, Long> {

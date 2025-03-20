@@ -1,6 +1,6 @@
 package br.com.taina.controller;
 
-import br.com.taina.dto.ContatoDTO;
+import br.com.taina.dto.contato.ContatoDTO;
 import br.com.taina.service.ContatoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;

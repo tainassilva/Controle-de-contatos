@@ -3,11 +3,11 @@ package br.com.taina.service;
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import br.com.taina.dto.ContatoDTO;
+import br.com.taina.dto.contato.ContatoDTO;
 import br.com.taina.enums.TipoContato;
 import br.com.taina.exception.IdNotFoundException;
-import br.com.taina.model.Contato;
-import br.com.taina.model.Pessoa;
+import br.com.taina.entity.Contato;
+import br.com.taina.entity.Pessoa;
 import br.com.taina.repository.ContatoRepository;
 import br.com.taina.repository.PessoaRepository;
 import br.com.taina.validation.ContatoValidation;

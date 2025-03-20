@@ -3,14 +3,14 @@ package br.com.taina.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.taina.dto.PessoaDTO;
-import br.com.taina.dto.PessoaMalaDiretaDTO;
+import br.com.taina.dto.pessoa.PessoaDTO;
+import br.com.taina.dto.pessoa.PessoaMalaDiretaDTO;
 import br.com.taina.enums.Estados;
 import br.com.taina.exception.ErroServidorException;
 import br.com.taina.exception.IdNotFoundException;
 import br.com.taina.exception.NadaParaListarException;
 import br.com.taina.exception.CampoNotNullException;
-import br.com.taina.model.Pessoa;
+import br.com.taina.entity.Pessoa;
 import br.com.taina.repository.PessoaRepository;
 
 import java.util.List;

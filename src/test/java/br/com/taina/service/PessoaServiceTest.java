@@ -4,11 +4,11 @@ import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import br.com.taina.exception.IdNotFoundException;
-import br.com.taina.dto.PessoaDTO;
+import br.com.taina.dto.pessoa.PessoaDTO;
 import br.com.taina.enums.Estados;
 import br.com.taina.exception.CampoNotNullException;
 import br.com.taina.exception.NadaParaListarException;
-import br.com.taina.model.Pessoa;
+import br.com.taina.entity.Pessoa;
 import br.com.taina.repository.PessoaRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import br.com.taina.dto.ContatoDTO;
+import br.com.taina.dto.contato.ContatoDTO;
 import br.com.taina.service.ContatoService;
 import io.swagger.v3.oas.annotations.Operation;
 
