@@ -10,7 +10,9 @@
 
 <p align="center">
   <b>Projeto API rest para gerenciar contatos de uma pessoa, construído com Java e Spring Boot para o processo seletivo da empresa Minsait.</b>
-</p>
+  <br>
+  <b>A versão original do projeto está na branch primeira-versão ou na tag v1.0</b>
+  
 <h3>📝 Pré-requisitos </h3>
 
 Aqui está a lista de todos os pré-requisitos necessários para executar o projeto:
