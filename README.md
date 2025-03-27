@@ -137,10 +137,10 @@ Aqui estão os principais endpoints da API e os detalhes de como interagir com e
 ```json
 {
   "nome": "Taina",
-  "endereco": "Rua Penha, 102",
+  "endereco": "Rua Penha, 999",
   "cep": "06700000",
-  "cidade": "Cotia",
-  "uf": "SP"
+  "cidade": "ABC",
+  "uf": "RJ"
 }
 ```
 
@@ -149,10 +149,10 @@ Aqui estão os principais endpoints da API e os detalhes de como interagir com e
 {
   "id": 1,
   "nome": "Taina",
-  "endereco": "Rua Penha, 102",
+  "endereco": "Rua Penha, 999",
   "cep": "06700000",
-  "cidade": "Cotia",
-  "uf": "SP"
+  "cidade": "ABC",
+  "uf": "RJ"
 }
 ```
 
@@ -168,10 +168,10 @@ localhost:8080/api/pessoas/1
 {
   "id": 1,
   "nome": "Taina",
-  "endereco": "Rua Penha, 102",
+  "endereco": "Rua Penha, 999",
   "cep": "06700000",
-  "cidade": "Cotia",
-  "uf": "SP"
+  "cidade": "ABC",
+  "uf": "RJ"
 }
 ```
 <h3><b>GET /api/pessoas/maladireta/{id}</b></h3>
@@ -186,7 +186,7 @@ localhost:8080/api/pessoas/maladireta/1
 {
   "id": 1,
   "nome": "Taina",
-  "malaDireta": "Rua Penha, 102 – CEP: 06700000 – Cotia / SP"
+  "malaDireta": "Rua Penha, 999 – CEP: 06700000 ABC / RJ"
 }
 ```
 
@@ -203,18 +203,18 @@ localhost:8080/api/pessoas
   {
     "id": 1,
     "nome": "Taina",
-    "endereco": "Rua Penha, 102",
+    "endereco": "Rua Penha, 999",
     "cep": "06700000",
-    "cidade": "Cotia",
-    "uf": "SP"
+    "cidade": "ABC",
+    "uf": "RJ"
   },
   {
     "id": 2,
     "nome": "Gabriela",
-    "endereco": "Rua Penha, 135",
+    "endereco": "Rua Penha, 000",
     "cep": "06700000",
-    "cidade": "Cotia",
-    "uf": "SP"
+    "cidade": "ABC",
+    "uf": "RJ"
   }
 ]
 ```
@@ -228,11 +228,11 @@ localhost:8080/api/pessoas/1
 
 ```json
 {
-  "nome": "Taina Santos Silva",
-  "endereco": "Rua Penha, 102",
+  "nome": "Taina Almeida",
+  "endereco": "Rua Penha, 999",
   "cep": "06700000",
-  "cidade": "Cotia",
-  "uf": "SP"
+  "cidade": "ABC",
+  "uf": "RJ"
 }
 ```
 
@@ -240,11 +240,11 @@ localhost:8080/api/pessoas/1
 ```json
 {
   "id": 1,
-  "nome": "Taina Santos Silva",
-  "endereco": "Rua Penha, 102",
+  "nome": "Taina Almeida",
+  "endereco": "Rua Penha, 999",
   "cep": "06700000",
-  "cidade": "Cotia",
-  "uf": "SP"
+  "cidade": "ABC",
+  "uf": "RJ"
 }
 ```
 
@@ -270,7 +270,7 @@ HTTP/1.1 204 NO CONTENT
 ```json
 {
   "tipoContato": "CELULAR",
-  "contato": "11974510719",
+  "contato": "11999999999",
   "idPessoa": 1
 }
 ```
@@ -280,7 +280,7 @@ HTTP/1.1 204 NO CONTENT
 {
   "id": 1,
   "tipoContato": "CELULAR",
-  "contato": "11974510719",
+  "contato": "11999999999",
   "idPessoa": 1
 }
 ```
@@ -297,7 +297,7 @@ localhost:8080/api/contatos/1
 {
   "id": 1,
   "tipoContato": "CELULAR",
-  "contato": "11974510719",
+  "contato": "11999999999",
   "idPessoa": 1
 }
 ```
@@ -314,7 +314,7 @@ localhost:8080/api/contatos/pessoa/1
   {
     "id": 1,
     "tipoContato": "CELULAR",
-    "contato": "11974510719",
+    "contato": "11999999999",
     "idPessoa": 1
   },
   {
